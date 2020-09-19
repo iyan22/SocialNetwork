@@ -1,0 +1,7 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Mike29,Mikel,Fernandez,02-04-1998,male,Donostia,Errenteria,Orereta;Koldo Mitxelena;Cashier,IT Technician,Avatar;The Smurfs 2,G61
+Iker78,Iker,Rodriguez,09-12-2000,male,Madrid,Donostia,La Salle;UCM,Math teacher,365;Ocean's 8;Revolutionary Road,G61
+Fern33,Fernando,Alvarez,13-01-2002,male,Barcelona,Donostia,La Salle,Musician,Ocean's 8, Avatar,G61
+Paul12,Paula,Martinez,19-10-2001,female,Oviedo,Lasarte,Corazon de Maria;La Inmaculada,Lab technician;Wedding photographer,Avatar;The Smurfs 2;Ocean's 8,G61
+Mari09,Maria Asuncion,Smith,23-02-2000,female,London,Lasarte,La Inmaculada,Wedding planner;Chef,Avatar;The Smurfs 2;Ocean's 8,G61
+Maia65,Maialen,Otegi,11-11-2001,female,Azkoitia,Azkoitia,Azkoitiko ikastola,EHU;Euskera teacher;Revolutionary Road;Okja;2Guns,G61
