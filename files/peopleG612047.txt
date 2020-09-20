@@ -1,0 +1,7 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Mike29,Mikel,Fernandez,02-04-1995,male,Donostia,Errenteria,Koldo Mitxelena;EHU,Donostia;Barcelona,Avatar;The Smurfs;The Smurfs 2,G612047
+Iker78,Iker,Rodriguez,09-12-1993,male,Madrid,Donostia,La Salle;UCM,Madrid;Barcelona;Donostia,The Smurfs 2;Titanic;Spider-Man,G612047
+Fern33,Fernando,Alvarez,13-01-1988,male,Barcelona,Donostia,La Salle;UB,Barcelona,Ocean's 8, Avatar,G612047
+Paul12,Paula,Martinez,19-10-2000,female,Oviedo,Intxaurrondo,Corazon de Maria;La Inmaculada,Oviedo;Donostia,Avatar;The Smurfs 2;The Lion King,G612047
+Mari09,Maria Asuncion,Smith,23-02-1995,female,London,Donostia,La Inmaculada;EHU;UC3M,New York;Silicon Valley,Avatar;Titanic;Spider-Man,G612047
+Maia65,Maialen,Otegi,11-11-1996,female,Azkoitia,Azkoitia,Azkoitiko ikastola;EHU,Oiartzun,Jurassic Park;The Lion King;Titanic,G612047

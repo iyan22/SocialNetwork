@@ -1,0 +1,16 @@
+friend1,friend2
+Fern33,Mike29
+Fern33,Maia65
+Fern33,Iker78
+Fern33,Mari09
+Fern33,Paul12
+Mike29,Maia65
+Mike29,Iker78
+Mike29,Mari09
+Mike29,Paul12
+Maia65,Iker78
+Maia65,Mari09
+Maia65,Paul12
+Iker78,Mari09
+Iker78,Paul12
+Mari09,Paul12
