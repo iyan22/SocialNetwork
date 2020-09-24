@@ -1,7 +1,10 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
+/**
+ * Person has a lot of data/information and can have relations with other Person's on the Social Network.
+ * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
+ *
+ * @author Iyán Álvarez
+ * @version firstIyan
+ */
 public class Person {
 
     // Attributes
@@ -17,6 +20,20 @@ public class Person {
     private String[] movies;
     private String groupcode;
 
+    /**
+     * Creates a Person with the specified data.
+     * @param identifier User ID's for the Social Network
+     * @param name Person's name.
+     * @param surname Person's surname.
+     * @param birthdate Person's birthdate in dd-mm-year format.
+     * @param gender Person's gender.
+     * @param birthplace Person's birthplace.
+     * @param home Person's home.
+     * @param studydata Person's study data.
+     * @param workdata Person's work data.
+     * @param movies Person's favourite movies.
+     * @param groupcode Groupcode.
+     */
     public Person(String identifier, String name, String surname, String birthdate, String gender, String birthplace, String home, String[] studydata, String[] workdata, String[] movies, String groupcode) {
         this.identifier = identifier;       // 0
         this.name = name;                   // 1
@@ -31,6 +48,10 @@ public class Person {
         this.groupcode = groupcode;         // 10
     }
 
+    /**
+     * Returns the basic information of a Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+     * @return The basic information of a Person in the specified format.
+     */
     @Override public String toString() {
         String studydataS = "";
         for(int i = 0; i < studydata.length; i++) {

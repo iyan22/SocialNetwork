@@ -5,6 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * SocialNetwork contains people information and the relations between them if exist.
+ * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
+ *
+ * @author Iyán Álvarez
+ * @version firstIyan
+ */
 public class SocialNetwork {
 
     // Attributes
@@ -14,6 +21,9 @@ public class SocialNetwork {
     private static SocialNetwork instance;
 
     // Constructors
+    /**
+     * Creates an instance of Social Network.
+     */
     private SocialNetwork() {
         this.personList = new ArrayList<>();
         this.relationList1 = new ArrayList<>();
@@ -21,6 +31,12 @@ public class SocialNetwork {
     }
 
     // Methods
+    /**
+     * Gets instance of the Social Network, if it does not exist it creates a new one, that is going to be unique
+     * and returns it.
+     * This method is based on the Singleton design pattern.
+     * @return The instance of the Social Network.
+     */
     public static SocialNetwork getInstance() {
         if (instance == null) {
             instance = new SocialNetwork();
@@ -28,6 +44,7 @@ public class SocialNetwork {
         return instance;
     }
 
+    // 1st milestone
     /**
      * Presents an initial menu with the different choices for interacting with the social network.
      */
@@ -49,7 +66,7 @@ public class SocialNetwork {
     }
     /**
      * Request user to select an option and do what was specified in the menu, if selected option does not
-     * exist, wil call the program recursively.
+     * exist, will call the program recursively.
      */
     private void selectionInitialMenu() {
         Scanner sc = new Scanner(System.in);
@@ -93,7 +110,11 @@ public class SocialNetwork {
             selectionInitialMenu();
         }
     }
-
+    /**
+     * Adds a person to the Social Netowork.
+     * @param data Data of the person.
+     *             Must follow the specified format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+     */
     private void addPerson(String data) {
         String[] d = data.split(",");
         String[] d7 = d[7].split(";");
@@ -102,7 +123,12 @@ public class SocialNetwork {
         Person p = new Person(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d7, d8, d9, d[10]);
         personList.add(p);
     }
-
+    /**
+     * Adds all the people from the file to the Social Network.
+     * The file must be on files/ directory.
+     * The file must follow the specified format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+     * @param filename Name of the file that contains people that is going to be added to the Social Network.
+     */
     private void addPeopleFromFile(String filename) {
         File f = new File("files/" + filename);
         try {
@@ -120,15 +146,17 @@ public class SocialNetwork {
             System.err.println("Error: File was not found");
         }
     }
-
+    /**
+     * Prints all the people at the Social Network to the console.
+     */
     private void printPeopleToConsole() {
         for (Person p: personList) {
             System.out.println(p.toString());
         }
     }
-
     /**
-     * Prints people at the Social Network to the files/ directory with the files specified name.
+     * Prints all the people at the Social Network to a file.
+     * The file will be located on files/ directory with the specified name.
      * @param filename Name of the file that is going to contain all the people in the Social Network.
      */
     private void printPeopleToFile(String filename) {
@@ -147,12 +175,21 @@ public class SocialNetwork {
         }
 
     }
-
+    /**
+     * Adds a relation of 2 people.
+     * @param p1 User ID of one person.
+     * @param p2 User ID of the other person.
+     */
     private void addRelation(String p1, String p2) {
         this.relationList1.add(p1);
         this.relationList2.add(p2);
     }
-
+    /**
+     * Adds all the relations that the specified file contains.
+     * The file must be on files/ directory.
+     * The file must follow the specified format: friend1,friend2
+     * @param filename Name of the file that contains relations that are going to be added to the Social Network.
+     */
     private void addRelationsFromFile(String filename) {
         File f = new File("files/" + filename);
         try {
@@ -173,8 +210,10 @@ public class SocialNetwork {
         }
     }
 
-    public static void main(String[] args) {
-        SocialNetwork sn = SocialNetwork.getInstance();
-        sn.initialMenu();
-    }
+    // 2nd milestone
+
+
+    // 3rd milestone
+
+
 }
