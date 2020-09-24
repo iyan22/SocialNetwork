@@ -31,8 +31,7 @@ public class Person {
         this.groupcode = groupcode;         // 10
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         String studydataS = "";
         for(int i = 0; i < studydata.length; i++) {
             studydataS += studydata[i];

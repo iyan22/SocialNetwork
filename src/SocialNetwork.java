@@ -9,13 +9,21 @@ public class SocialNetwork {
 
     // Attributes
     private ArrayList<Person> personList;
+    private static SocialNetwork instance;
 
     // Constructors
-    public SocialNetwork() {
+    private SocialNetwork() {
         this.personList = new ArrayList<>();
     }
 
     // Methods
+    public static SocialNetwork getInstance() {
+        if (instance == null) {
+            instance = new SocialNetwork();
+        }
+        return instance;
+    }
+
     /**
      * Presents an initial menu with the different choices for interacting with the social network.
      */
@@ -45,7 +53,7 @@ public class SocialNetwork {
         String fn;
         switch (option){
             case 1:
-                System.out.println("Write the name of the file: " );
+                System.out.print("Write the name of the file: " );
                 fn = sc.next();
                 System.out.print("\nLoading 'people' into the network ... ");
                 addPeopleFromFile(fn);
@@ -57,14 +65,14 @@ public class SocialNetwork {
                 System.out.print("completed.\n\n");
                 break;
             case 3:
-                System.out.println("Printing out people to console: \n" );
+                System.out.println("\nPrinting out people to console: \n" );
                 printPeopleToConsole();
                 System.out.println("\nCompleted.\n\n");
                 break;
             case 4:
-                System.out.println("Write the name of the file: " );
+                System.out.print("Write the name of the file: " );
                 fn = sc.next();
-                System.out.print("Printing out people to file ... " );
+                System.out.print("\nPrinting out people to file ... " );
                 printPeopleToFile(fn);
                 System.out.print("completed.\n\n");
                 break;
@@ -113,6 +121,10 @@ public class SocialNetwork {
         }
     }
 
+    /**
+     * Prints people at the Social Network to the files/ directory with the files specified name.
+     * @param filename Name of the file that is going to contain all the people in the Social Network.
+     */
     public void printPeopleToFile(String filename) {
         File f = new File("files/" + filename);
         FileWriter fw = null;
@@ -131,7 +143,7 @@ public class SocialNetwork {
     }
 
     public static void main(String[] args) {
-        SocialNetwork sn = new SocialNetwork();
+        SocialNetwork sn = SocialNetwork.getInstance();
         sn.initialMenu();
     }
 }
