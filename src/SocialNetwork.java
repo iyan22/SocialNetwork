@@ -9,11 +9,15 @@ public class SocialNetwork {
 
     // Attributes
     private ArrayList<Person> personList;
+    private ArrayList<String> relationList1;
+    private ArrayList<String> relationList2;
     private static SocialNetwork instance;
 
     // Constructors
     private SocialNetwork() {
         this.personList = new ArrayList<>();
+        this.relationList1 = new ArrayList<>();
+        this.relationList2 = new ArrayList<>();
     }
 
     // Methods
@@ -60,8 +64,10 @@ public class SocialNetwork {
                 System.out.print("completed.\n\n");
                 break;
             case 2:
+                System.out.print("Write the name of the file: " );
+                fn = sc.next();
                 System.out.print("\nLoading 'realtions' ... ");
-
+                addRelationsFromFile(fn);
                 System.out.print("completed.\n\n");
                 break;
             case 3:
@@ -88,7 +94,7 @@ public class SocialNetwork {
         }
     }
 
-    public void addPerson(String data) {
+    private void addPerson(String data) {
         String[] d = data.split(",");
         String[] d7 = d[7].split(";");
         String[] d8 = d[8].split(";");
@@ -97,7 +103,7 @@ public class SocialNetwork {
         personList.add(p);
     }
 
-    public void addPeopleFromFile(String filename) {
+    private void addPeopleFromFile(String filename) {
         File f = new File("files/" + filename);
         try {
             Scanner sf = new Scanner(f);
@@ -115,7 +121,7 @@ public class SocialNetwork {
         }
     }
 
-    public void printPeopleToConsole() {
+    private void printPeopleToConsole() {
         for (Person p: personList) {
             System.out.println(p.toString());
         }
@@ -125,7 +131,7 @@ public class SocialNetwork {
      * Prints people at the Social Network to the files/ directory with the files specified name.
      * @param filename Name of the file that is going to contain all the people in the Social Network.
      */
-    public void printPeopleToFile(String filename) {
+    private void printPeopleToFile(String filename) {
         File f = new File("files/" + filename);
         FileWriter fw = null;
         try {
@@ -140,6 +146,31 @@ public class SocialNetwork {
             System.err.println("Error: File was not found");
         }
 
+    }
+
+    private void addRelation(String p1, String p2) {
+        this.relationList1.add(p1);
+        this.relationList2.add(p2);
+    }
+
+    private void addRelationsFromFile(String filename) {
+        File f = new File("files/" + filename);
+        try {
+            Scanner sf = new Scanner(f);
+            String sexample = "friend1,friend2";
+            if (sexample.equals(sf.nextLine())) {
+                String arr[];
+                while (sf.hasNextLine()) {
+                    arr = sf.nextLine().split(",");
+                    addRelation(arr[0], arr[1]);
+                }
+            }
+            else {
+                System.err.println("Error: File data is not in required format");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File was not found");
+        }
     }
 
     public static void main(String[] args) {
