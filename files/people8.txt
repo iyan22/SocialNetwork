@@ -1,0 +1,9 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Jon232,Jon,Garcia,3-3-1990,male,Donostia,Donostia,LaSalle;UPV/EHU;Stanford,Connecticut,Star Wars;The Godfather;The Godfather: Part II,G0001
+Mikel34,Jon Mikel,Lopez de Haro,9-9-1700,male,Bilbao,Caracas,Lizeoa;UPV/EHU,Caracas,The Lord of the Rings;Forrest Gump,G0001
+Roberto22,Roberto,Egia,4-4-1933,male,Vitoria-Gasteiz,Vitoria-Gasteiz,The Becket School;Paris-Sorbonne,Paris;Vitoria-Gasteiz,Alien;Life is Beautiful;Toy Story 3,G0001
+Leire1,Leire,Alba-Aguirre,5-5-1955,female,Tolosa,Seville,Insti Penaflorida;Imperial College,London;Madrid;New York,The Matrix;Forrest Gump;Casablanca,G0001
+Bizenta223,Bizenta,Juaristi,1-1-1501,female,Azkoitia,La Paz,Onati,Bolivia,12 Angry Men;Fight Club,G0001
+Arantza22,Aranzazu,Bidaurreta,3-3-1833,female,Larraitz,Amezketa,Tolosa,Paris;Nice,Goodfellas;Taxi Driver;Double Indemnity,G0001
+Agnetta33,Agnetta,Bensson,1-1-1940,female,Sweden,London,Stockholm,Stockholm;London;Oslo;Paris,The Intouchables;To Kill a Mockingbird;Reservoir Dogs;Cinema Paradiso,G0001
+Gisella11,Gisella,Fabricci,3-3-1993,female,Torino,Donostia,Rome;UPV/EHU,Rome;Madrid;Donostia,The Lion King;The Third Man;Star Wars: Episode VI - Return of the Jedi;Princess Mononoke,G0001

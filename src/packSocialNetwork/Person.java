@@ -1,5 +1,7 @@
+package packSocialNetwork;
+
 /**
- * Person has a lot of data/information and can have relations with other Person's on the Social Network.
+ * Person has a lot of data/information and can have relations with other packSocialNetwork.Person's on the Social Network.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez
@@ -20,18 +22,19 @@ public class Person {
     private String[] movies;
     private String groupcode;
 
+    // Constructors
     /**
-     * Creates a Person with the specified data.
+     * Creates a packSocialNetwork.Person with the specified data.
      * @param identifier User ID's for the Social Network
-     * @param name Person's name.
-     * @param surname Person's surname.
-     * @param birthdate Person's birthdate in dd-mm-year format.
-     * @param gender Person's gender.
-     * @param birthplace Person's birthplace.
-     * @param home Person's home.
-     * @param studydata Person's study data.
-     * @param workdata Person's work data.
-     * @param movies Person's favourite movies.
+     * @param name packSocialNetwork.Person's name.
+     * @param surname packSocialNetwork.Person's surname.
+     * @param birthdate packSocialNetwork.Person's birthdate in dd-mm-year format.
+     * @param gender packSocialNetwork.Person's gender.
+     * @param birthplace packSocialNetwork.Person's birthplace.
+     * @param home packSocialNetwork.Person's home.
+     * @param studydata packSocialNetwork.Person's study data.
+     * @param workdata packSocialNetwork.Person's work data.
+     * @param movies packSocialNetwork.Person's favourite movies.
      * @param groupcode Groupcode.
      */
     public Person(String identifier, String name, String surname, String birthdate, String gender, String birthplace, String home, String[] studydata, String[] workdata, String[] movies, String groupcode) {
@@ -48,9 +51,31 @@ public class Person {
         this.groupcode = groupcode;         // 10
     }
 
+    // Methods
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getBirthplace() {
+        return birthplace;
+    }
+
+    public String getBasicInfo() {
+        return identifier + " " + name + " " + surname;
+    }
+
     /**
-     * Returns the basic information of a Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
-     * @return The basic information of a Person in the specified format.
+     * Returns the basic information of a packSocialNetwork.Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+     * @return The basic information of a packSocialNetwork.Person in the specified format.
      */
     @Override public String toString() {
         String studydataS = "";

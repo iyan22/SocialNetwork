@@ -1,5 +1,9 @@
+package packSocialNetwork;
+
+import packSocialNetwork.SocialNetwork;
+
 /**
- * SocialNetworkSimulation simulates how the SocialNetwork works.
+ * SocialNetworkSimulation simulates how the packSocialNetwork.SocialNetwork works.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez

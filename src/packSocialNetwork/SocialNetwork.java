@@ -1,3 +1,7 @@
+package packSocialNetwork;
+
+import packSocialNetworkExceptions.PersonNotFoundException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -61,7 +65,9 @@ public class SocialNetwork {
                             "2. Load 'relationships'...\n" +
                             "3. Print out people to console ... \n" +
                             "4. Print out people to file ... \n" +
-                            "5. Log out \n \n");
+                            "5. Find friends given the surname ... \n" +
+                            "6. Find people given the birthplace ... \n" +
+                            "7. Log out \n \n");
         System.out.print("Select one option: ");
     }
     /**
@@ -72,6 +78,7 @@ public class SocialNetwork {
         Scanner sc = new Scanner(System.in);
         int option = sc.nextInt();
         String fn;
+        String fna;
         switch (option){
             case 1:
                 System.out.print("Write the name of the file: " );
@@ -100,12 +107,46 @@ public class SocialNetwork {
                 System.out.print("completed.\n\n");
                 break;
             case 5:
+                System.out.print("Write the surname: ");
+                fna = sc.next();
+                fn = "Input";
+                while ( !((fn.equals("C")) | (fn.equals("F")) )) {
+                    System.out.print("Print to the console (C) or to a file (F): ");
+                    fn = sc.next();
+                }
+                if (fn.equals("C")) {
+                    printFriendsBySurnameToConsole(fna);
+                }
+                else {
+                    System.out.print("Write the name of the file: " );
+                    fn = sc.next();
+                    printFriendsBySurnameToFile(fna,fn);
+                }
+                break;
+            case 6:
+                System.out.print("Write the city: ");
+                fna = sc.next();
+                fn = "Input";
+                while ( !((fn.equals("C")) | (fn.equals("F")) )) {
+                    System.out.print("Print to the console (C) or to a file (F): ");
+                    fn = sc.next();
+                }
+                if (fn.equals("C")) {
+                    printPeopleBornInCityToConsole(fna);
+                }
+                else {
+                    System.out.print("Write the name of the file: " );
+                    fn = sc.next();
+                    printPeopleBornInCityToFile(fna,fn);
+                }
+                break;
+            case 7:
                 System.out.println("Logging out...");
                 break;
             default:
                 break;
         }
-        if (option != 5) {
+        if (option != 7) {
             printInitialMenu();
             selectionInitialMenu();
         }
@@ -173,7 +214,6 @@ public class SocialNetwork {
         } catch (IOException e) {
             System.err.println("Error: File was not found");
         }
-
     }
     /**
      * Adds a relation of 2 people.
@@ -211,7 +251,103 @@ public class SocialNetwork {
     }
 
     // 2nd milestone
-
+    private void printFriendsBySurnameToConsole(String surname) {
+        try {
+            System.out.println(findFriendsBySurname(surname));
+        } catch (PersonNotFoundException e) {
+            System.err.println("Error: A Person does not exist in the Social Network");
+        }
+    }
+    private void printFriendsBySurnameToFile(String surname, String filename) {
+        File f = new File("files/" + filename);
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(f);
+            fw.write(findFriendsBySurname(surname));
+            fw.close();
+        } catch (IOException e) {
+            System.err.println("Error: File was not found");
+        } catch (PersonNotFoundException e) {
+            System.err.println("Error: A Person does not exist in the Social Network");
+        }
+    }
+    private String findFriendsBySurname(String surname) throws PersonNotFoundException {
+        String s = "";
+        ArrayList<Person> arr = findPersonBySurname(surname);
+        String id;
+        for (Person p: arr) {
+            id = p.getIdentifier();
+            s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
+            for(int i = 0; i < relationList1.size(); i++) { // Always relationList1.size() == relationList2.size()
+                if(relationList1.get(i).equals(id)) {
+                    s += findPersonByID(relationList2.get(i)).getBasicInfo() + "\n";
+                }
+                else if (relationList2.get(i).equals(id)) {
+                    s += findPersonByID(relationList1.get(i)).getBasicInfo() + "\n";
+                }
+            }
+        }
+        return s;
+    }
+    private Person findPersonByID(String identifier) throws PersonNotFoundException {
+        ArrayList<Person> arr = new ArrayList<>();
+        for (Person p: personList) {
+            if (p.getIdentifier().equals(identifier)) {
+                return p;
+            }
+        }
+        throw new PersonNotFoundException();
+    }
+    private ArrayList<Person> findPersonBySurname(String surname) throws PersonNotFoundException {
+        ArrayList<Person> arr = new ArrayList<>();
+        for (Person p: personList) {
+            if (p.getSurname().equals(surname)) {
+                arr.add(p);
+            }
+        }
+        if (arr.isEmpty()) {
+            throw new PersonNotFoundException();
+        }
+        return arr;
+    }
+    private void printPeopleBornInCityToConsole(String city) {
+        try {
+            System.out.println(findPeopleBornInCity(city));
+        } catch (PersonNotFoundException e) {
+            System.err.println("Error: No one in the Social Network has born there");
+        }
+    }
+    private void printPeopleBornInCityToFile(String city, String filename) {
+        File f = new File("files/" + filename);
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(f);
+            fw.write(findPeopleBornInCity(city));
+            fw.close();
+        } catch (IOException e) {
+            System.err.println("Error: File was not found");
+        } catch (PersonNotFoundException e) {
+            System.err.println("Error: No one in the Social Network has born there");
+        }
+    }
+    private String findPeopleBornInCity(String city) throws PersonNotFoundException {
+        String s = "These are the user's born in " + city + ":\n";
+        String bplace;
+        int n = 0;
+        for (Person p: personList) {
+            bplace = p.getBirthplace();
+            if (bplace.equals(city)) {
+                s += p.getBasicInfo() + "\n";
+                n++;
+            }
+        }
+        if (n==0) {
+            throw new PersonNotFoundException();
+        }
+        else {
+            return s;
+        }
+    }
 
     // 3rd milestone
 

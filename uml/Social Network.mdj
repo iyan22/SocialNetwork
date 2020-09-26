@@ -17,8 +17,8 @@
 					"_parent": {
 						"$ref": "AAAAAAF0xHW9j5zmjnY="
 					},
-					"name": "Person",
-					"documentation": "Person has a lot of data/information and can have relations with other Person's on the Social Network.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
+					"name": "packSocialNetwork.Person",
+					"documentation": "packSocialNetwork.Person has a lot of data/information and can have relations with other packSocialNetwork.Person's on the Social Network.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -141,8 +141,8 @@
 							"_parent": {
 								"$ref": "AAAAAAF0xHW9ppznCLE="
 							},
-							"name": "Person",
-							"documentation": "Creates a Person with the specified data.\n@param identifier User ID's for the Social Network\n@param name Person's name.\n@param surname Person's surname.\n@param birthdate Person's birthdate in dd-mm-year format.\n@param gender Person's gender.\n@param birthplace Person's birthplace.\n@param home Person's home.\n@param studydata Person's study data.\n@param workdata Person's work data.\n@param movies Person's favourite movies.\n@param groupcode Groupcode.",
+							"name": "packSocialNetwork.Person",
+							"documentation": "Creates a packSocialNetwork.Person with the specified data.\n@param identifier User ID's for the Social Network\n@param name packSocialNetwork.Person's name.\n@param surname packSocialNetwork.Person's surname.\n@param birthdate packSocialNetwork.Person's birthdate in dd-mm-year format.\n@param gender packSocialNetwork.Person's gender.\n@param birthplace packSocialNetwork.Person's birthplace.\n@param home packSocialNetwork.Person's home.\n@param studydata packSocialNetwork.Person's study data.\n@param workdata packSocialNetwork.Person's work data.\n@param movies packSocialNetwork.Person's favourite movies.\n@param groupcode Groupcode.",
 							"stereotype": "constructor",
 							"parameters": [
 								{
@@ -256,7 +256,7 @@
 								"$ref": "AAAAAAF0xHW9ppznCLE="
 							},
 							"name": "toString",
-							"documentation": "Returns the basic information of a Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode\n@return The basic information of a Person in the specified format.",
+							"documentation": "Returns the basic information of a packSocialNetwork.Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode\n@return The basic information of a packSocialNetwork.Person in the specified format.",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -277,7 +277,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF0xHW9j5zmjnY="
 					},
-					"name": "SocialNetwork",
+					"name": "packSocialNetwork.SocialNetwork",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -367,7 +367,7 @@
 							}
 						}
 					],
-					"documentation": "SocialNetwork contains people information and the relations between them if exist.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
+					"documentation": "packSocialNetwork.SocialNetwork contains people information and the relations between them if exist.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -423,7 +423,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0xHW9vJz2o6o="
 							},
-							"name": "SocialNetwork",
+							"name": "packSocialNetwork.SocialNetwork",
 							"documentation": "Creates an instance of Social Network.",
 							"stereotype": "constructor",
 							"visibility": "private"
@@ -701,7 +701,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF0xHW9j5zmjnY="
 					},
-					"name": "SocialNetworkSimulation",
+					"name": "packSocialNetwork.SocialNetworkSimulation",
 					"ownedElements": [
 						{
 							"_type": "UMLDependency",
@@ -717,7 +717,7 @@
 							}
 						}
 					],
-					"documentation": "SocialNetworkSimulation simulates how the SocialNetwork works.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
+					"documentation": "packSocialNetwork.SocialNetworkSimulation simulates how the packSocialNetwork.SocialNetwork works.\nThis project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.\n@author Iyán Álvarez\n@version firstIyan",
 					"operations": [
 						{
 							"_type": "UMLOperation",
@@ -808,7 +808,7 @@
 											"top": 27,
 											"width": 44.07177734375,
 											"height": 13,
-											"text": "Person"
+											"text": "packSocialNetwork.Person"
 										},
 										{
 											"_type": "LabelView",
@@ -1079,7 +1079,7 @@
 											"top": 5,
 											"width": 1222.23486328125,
 											"height": 13,
-											"text": "«constructor»+Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
+											"text": "«constructor»+packSocialNetwork.Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1199,7 +1199,7 @@
 											"top": 62,
 											"width": 89.58447265625,
 											"height": 13,
-											"text": "SocialNetwork"
+											"text": "packSocialNetwork.SocialNetwork"
 										},
 										{
 											"_type": "LabelView",
@@ -1317,7 +1317,7 @@
 											"top": 5,
 											"width": 261.54248046875,
 											"height": 13,
-											"text": "«constructor»-SocialNetwork()",
+											"text": "«constructor»-packSocialNetwork.SocialNetwork()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1335,7 +1335,7 @@
 											"width": 261.54248046875,
 											"height": 13,
 											"underline": true,
-											"text": "+getInstance(): SocialNetwork",
+											"text": "+getInstance(): packSocialNetwork.SocialNetwork",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1591,7 +1591,7 @@
 											"top": 97,
 											"width": 156.03173828125,
 											"height": 13,
-											"text": "SocialNetworkSimulation"
+											"text": "packSocialNetwork.SocialNetworkSimulation"
 										},
 										{
 											"_type": "LabelView",
@@ -1787,7 +1787,7 @@
 											"top": 27,
 											"width": 44.07177734375,
 											"height": 13,
-											"text": "Person"
+											"text": "packSocialNetwork.Person"
 										},
 										{
 											"_type": "LabelView",
@@ -2058,7 +2058,7 @@
 											"top": 5,
 											"width": 1222.23486328125,
 											"height": 13,
-											"text": "«constructor»+Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
+											"text": "«constructor»+packSocialNetwork.Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2178,7 +2178,7 @@
 											"top": 82,
 											"width": 89.58447265625,
 											"height": 13,
-											"text": "SocialNetwork"
+											"text": "packSocialNetwork.SocialNetwork"
 										},
 										{
 											"_type": "LabelView",
@@ -2296,7 +2296,7 @@
 											"top": 5,
 											"width": 261.54248046875,
 											"height": 13,
-											"text": "«constructor»-SocialNetwork()",
+											"text": "«constructor»-packSocialNetwork.SocialNetwork()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2314,7 +2314,7 @@
 											"width": 261.54248046875,
 											"height": 13,
 											"underline": true,
-											"text": "+getInstance(): SocialNetwork",
+											"text": "+getInstance(): packSocialNetwork.SocialNetwork",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2570,7 +2570,7 @@
 											"top": 27,
 											"width": 156.03173828125,
 											"height": 13,
-											"text": "SocialNetworkSimulation"
+											"text": "packSocialNetwork.SocialNetworkSimulation"
 										},
 										{
 											"_type": "LabelView",
@@ -3044,7 +3044,7 @@
 											"top": 167,
 											"width": 1222.23486328125,
 											"height": 13,
-											"text": "Person"
+											"text": "packSocialNetwork.Person"
 										},
 										{
 											"_type": "LabelView",
@@ -3352,7 +3352,7 @@
 											"top": 363,
 											"width": 1222.23486328125,
 											"height": 13,
-											"text": "«constructor»+Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
+											"text": "«constructor»+packSocialNetwork.Person(identifier: String, name: String, surname: String, birthdate: String, gender: String, birthplace: String, home: String, studydata: String[*], workdata: String[*], movies: String[*], groupcode: String)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3491,7 +3491,7 @@
 											"top": 679,
 											"width": 262.49462890625,
 											"height": 13,
-											"text": "SocialNetwork"
+											"text": "packSocialNetwork.SocialNetwork"
 										},
 										{
 											"_type": "LabelView",
@@ -3628,7 +3628,7 @@
 											"top": 740,
 											"width": 262.49462890625,
 											"height": 13,
-											"text": "«constructor»-SocialNetwork()",
+											"text": "«constructor»-packSocialNetwork.SocialNetwork()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3648,7 +3648,7 @@
 											"width": 262.49462890625,
 											"height": 13,
 											"underline": true,
-											"text": "+getInstance(): SocialNetwork",
+											"text": "+getInstance(): packSocialNetwork.SocialNetwork",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3939,7 +3939,7 @@
 											"top": 775,
 											"width": 156.03173828125,
 											"height": 13,
-											"text": "SocialNetworkSimulation"
+											"text": "packSocialNetwork.SocialNetworkSimulation"
 										},
 										{
 											"_type": "LabelView",
