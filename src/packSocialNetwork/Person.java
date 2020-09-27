@@ -52,27 +52,59 @@ public class Person {
     }
 
     // Methods
-
+    /**
+     * Getter of the user's ID.
+     * @return user's ID (indentifier)
+     */
     public String getIdentifier() {
         return identifier;
     }
-
+    /**
+     * Getter of the user's name.
+     * @return Name of the person.
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * Getter of the user's surname.
+     * @return Surname of the person.
+     */
     public String getSurname() {
         return surname;
     }
-
+    /**
+     * Getter of the user's birthplace.
+     * @return Birthplace of the person.
+     */
     public String getBirthplace() {
         return birthplace;
     }
-
+    /**
+     * Gets the basic information of the user: ID Name Surname
+     * @return Values of ID, Name and Surname separated by blanks.
+     */
     public String getBasicInfo() {
         return identifier + " " + name + " " + surname;
     }
-
+    /**
+     * Compares a Person with the given Object and returns true if the ID, name and surname are the same.
+     * @param o Object that is going to be compared.
+     * @return true iif is the same instance or the Object is a Person and the user's ID, name and surname are the same;
+     * otherwise false.
+     */
+    @Override public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Person)) {
+            return false;
+        }
+        Person person = (Person) o;
+        return  this.identifier.equals(person.getIdentifier()) &&
+                this.name.equals(person.getName()) &&
+                this.surname.equals(person.getSurname());
+    }
     /**
      * Returns the basic information of a packSocialNetwork.Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
      * @return The basic information of a packSocialNetwork.Person in the specified format.
@@ -81,14 +113,23 @@ public class Person {
         String studydataS = "";
         for(int i = 0; i < studydata.length; i++) {
             studydataS += studydata[i];
+            if (i < studydata.length-1) {
+                studydataS += ";";
+            }
         }
         String workdataS = "";
         for(int i = 0; i < workdata.length; i++) {
             workdataS += workdata[i];
+            if (i < workdata.length-1) {
+                workdataS += ";";
+            }
         }
         String moviesS = "";
         for(int i = 0; i < movies.length; i++) {
             moviesS += movies[i];
+            if (i < movies.length-1) {
+                moviesS += ";";
+            }
         }
         return  identifier + "," + name + "," + surname + "," + birthdate + "," + gender + "," +
                 birthplace + "," + home + "," + studydataS + "," + workdataS +

@@ -6,4 +6,4 @@ Leire1,Leire,Alba-Aguirre,5-5-1955,female,Tolosa,Seville,Insti Penaflorida;Imper
 Bizenta223,Bizenta,Juaristi,1-1-1501,female,Azkoitia,La Paz,Onati,Bolivia,12 Angry Men;Fight Club,G0001
 Arantza22,Aranzazu,Bidaurreta,3-3-1833,female,Larraitz,Amezketa,Tolosa,Paris;Nice,Goodfellas;Taxi Driver;Double Indemnity,G0001
 Agnetta33,Agnetta,Bensson,1-1-1940,female,Sweden,London,Stockholm,Stockholm;London;Oslo;Paris,The Intouchables;To Kill a Mockingbird;Reservoir Dogs;Cinema Paradiso,G0001
-Gisella11,Gisella,Fabricci,3-3-1993,female,Torino,Donostia,Rome;UPV/EHU,Rome;Madrid;Donostia,The Lion King;The Third Man;Star Wars: Episode VI - Return of the Jedi;Princess Mononoke,G0001
+Gisella11,Gisella,Fabricci,3-3-1993,,,,,,,G0001
