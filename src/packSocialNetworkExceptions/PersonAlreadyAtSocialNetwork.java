@@ -1,4 +1,4 @@
 package packSocialNetworkExceptions;
 
-public class PersonAlreadyAtSocialNetwork extends Exception {
+public class PersonAlreadyAtSocialNetwork extends RuntimeException {
 }

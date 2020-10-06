@@ -1,5 +1,5 @@
 package packSocialNetworkExceptions;
 
-public class PersonNotFoundException extends Exception {
+public class PersonNotFoundException extends RuntimeException {
 
 }

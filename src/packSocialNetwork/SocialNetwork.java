@@ -2,6 +2,7 @@ package packSocialNetwork;
 
 import packSocialNetworkExceptions.PersonAlreadyAtSocialNetwork;
 import packSocialNetworkExceptions.PersonNotFoundException;
+import packSocialNetworkExceptions.RelationshipAlreadyAtSocialNetwork;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,9 +23,9 @@ public class SocialNetwork {
 
     // Attributes
     private ArrayList<Person> personList;
-    private ArrayList<String> relationList1;
-    private ArrayList<String> relationList2;
+    private ArrayList<Relationship> relationList;
     private static SocialNetwork instance;
+    private final Scanner sc = new Scanner(System.in);
 
     // Constructors
     /**
@@ -32,8 +33,7 @@ public class SocialNetwork {
      */
     private SocialNetwork() {
         this.personList = new ArrayList<>();
-        this.relationList1 = new ArrayList<>();
-        this.relationList2 = new ArrayList<>();
+        this.relationList = new ArrayList<>();
     }
 
     // Methods
@@ -62,45 +62,66 @@ public class SocialNetwork {
      * Prints the choices of the initial menu.
      */
     private void printInitialMenu() {
-        System.out.println( "Social Network menu: \n" +
-                            "1. Load 'people' into the network ... \n" +
-                            "2. Load 'relationships'...\n" +
-                            "3. Print out people to console ... \n" +
-                            "4. Print out people to file ... \n" +
-                            "5. Find friends given the surname ... \n" +
-                            "6. Find people given the birthplace ... \n" +
-                            "7. Log out \n \n");
+        System.out.println("Social Network menu:");
+        printAddPersonPeople();
+        printAddRelationships();
+        printPrintOut();
+        printFind();
+        System.out.println("5. Log out \n \n");
+    }
+    private void printAddPersonPeople() {
+        System.out.println(
+                        "1. Add person or people: \n" +
+                        "    - Manually \n" +
+                        "    - File \n");
+    }
+    private void printAddRelationships() {
+        System.out.println(
+                        "2. Add relationships: \n" +
+                        "    - Manually \n" +
+                        "    - File \n");
+    }
+    private void printPrintOut() {
+        System.out.println(
+                        "3. Print out people: \n" +
+                        "    - Console \n" +
+                        "    - File \n");
+    }
+    private void printFind() {
+        System.out.println(
+                        "4. Find: \n" +
+                        "    - Friends by Surname \n" +
+                        "    - City \n" +
+                        "    - Dates \n" +
+                        "    - Movies \n" +
+                        "    - Chain \n" +
+                        "    - Cliques \n");
+    }
+    private void printFindFriendsBySurname() {
+        System.out.println("Find friends by surname: ");
+
+
     }
     /**
      * Request user to select an option and do what was specified in the menu, if selected option does not
      * exist, will call the program recursively.
      */
     private void selectionInitialMenu() {
-        Scanner sc = new Scanner(System.in);
         String fn;
         String fna;
         int option;
         do {
             option = askForSelectionInput();
+            System.out.println("You have selected: ");
             switch (option) {
                 case 1:
-                    System.out.print("Write the name of the file: ");
-                    fn = sc.next();
-                    System.out.print("\nLoading 'people' into the network ... ");
-                    addPeopleFromFile(fn);
-                    System.out.print("completed.\n\n");
+                    addPersonPeopleSelected();
                     break;
                 case 2:
-                    System.out.print("Write the name of the file: ");
-                    fn = sc.next();
-                    System.out.print("\nLoading 'realtions' ... ");
-                    addRelationsFromFile(fn);
-                    System.out.print("completed.\n\n");
+                    addRelationshipsSelected();
                     break;
                 case 3:
-                    System.out.println("\nPrinting out people to console: \n");
-                    printPeopleToConsole();
-                    System.out.println("\nCompleted.\n\n");
+                    printOutSelected();
                     break;
                 case 4:
                     System.out.print("Write the name of the file: ");
@@ -110,6 +131,9 @@ public class SocialNetwork {
                     System.out.print("completed.\n\n");
                     break;
                 case 5:
+                    System.out.println("Logging out...");
+                    break;
+                    /*
                     System.out.print("Write the surname: ");
                     fna = sc.next();
                     fn = "Input";
@@ -144,10 +168,13 @@ public class SocialNetwork {
                 case 7:
                     System.out.println("Logging out...");
                     break;
+                     */
                 default:
                     break;
             }
-        } while (option != 7);
+            if (option != 5) printInitialMenu();
+        } while (option != 5);
+        sc.close();
     }
     /**
      * Request user for an input, it has to be a number and treats InputMismatchException.
@@ -169,6 +196,77 @@ public class SocialNetwork {
         }
         return option;
     }
+    private void addPersonPeopleSelected() {
+        printAddPersonPeople();
+        String to;
+        do {
+            System.out.println("Manually (M) or File (F)");
+            System.out.print("\nEnter M or F: ");
+            to = sc.next();
+        } while (!(to.equals("M") || to.equals("F")));
+        if (to.equals("M")) {
+            System.out.println("Follow the next format:");
+            System.out.println("idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode");
+            try {
+                addPerson(sc.next());
+            } catch (PersonAlreadyAtSocialNetwork e) {
+                System.out.println("That person is already at the network");
+            }
+        }
+        else {
+            System.out.println("The file must be on 'files/' directory.");
+            System.out.print("Enter the name of the file: ");
+            addPeopleFromFile(sc.next());
+            System.out.print("Completed.\n\n");
+        }
+    }
+    private void addRelationshipsSelected() {
+        printAddRelationships();
+        String to;
+        do {
+            System.out.println("Manually (M) or File (F)");
+            System.out.print("\nEnter M or F: ");
+            to = sc.next();
+        } while (!(to.equals("M") || to.equals("F")));
+        if (to.equals("M")) {
+            System.out.println("Follow the next format:");
+            System.out.println("friend1,friend2");
+            try {
+                String s = sc.next();
+                String[] sa = s.split(",");
+                addRelation(sa[0], sa[1]);
+            } catch (RelationshipAlreadyAtSocialNetwork e) {
+                System.out.println("That relationship is already at the network");
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("There was an error with your input");
+            }
+        }
+        else {
+            System.out.println("The file must be on 'files/' directory.");
+            System.out.print("Enter the name of the file: ");
+            addRelationsFromFile(sc.next());
+            System.out.print("Completed.\n\n");
+        }
+    }
+    private void printOutSelected() {
+        printPrintOut();
+        String to;
+        do {
+            System.out.println("Console (C) or File (F)");
+            System.out.print("\nEnter C or F: ");
+            to = sc.next();
+        } while (!(to.equals("C") || to.equals("F")));
+        if (to.equals("C")) {
+            printPeopleToConsole();
+        }
+        else {
+            System.out.println("The file must be on 'files/' directory.");
+            System.out.print("Enter the name of the file: ");
+            printPeopleToFile(sc.next());
+        }
+    }
+
+
     /**
      * Adds a person to the Social Netowork.
      * @param data Data of the person.
@@ -182,11 +280,15 @@ public class SocialNetwork {
                 throw new PersonAlreadyAtSocialNetwork();
             }
         }
-        String[] d7 = d[7].split(";");
-        String[] d8 = d[8].split(";");
-        String[] d9 = d[9].split(";");
-        Person p = new Person(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d7, d8, d9, d[10]);
-        personList.add(p);
+        try {
+            String[] d7 = d[7].split(";");
+            String[] d8 = d[8].split(";");
+            String[] d9 = d[9].split(";");
+            Person p = new Person(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d7, d8, d9, d[10]);
+            personList.add(p);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There was an error with your input");
+        }
     }
     /**
      * Adds all the people from the file to the Social Network.
@@ -206,10 +308,10 @@ public class SocialNetwork {
                 }
             }
             else {
-                System.err.println("Error: File data is not in required format");
+                System.out.println("Error: File data is not in required format");
             }
         } catch (FileNotFoundException e) {
-            System.err.println("Error: File was not found");
+            System.out.println("Error: File was not found");
         } catch (PersonAlreadyAtSocialNetwork e) {
             error++;
         }
@@ -250,9 +352,13 @@ public class SocialNetwork {
      * @param p1 User ID of one person.
      * @param p2 User ID of the other person.
      */
-    private void addRelation(String p1, String p2) {
-        this.relationList1.add(p1);
-        this.relationList2.add(p2);
+    private void addRelation(String p1, String p2) throws RelationshipAlreadyAtSocialNetwork, PersonNotFoundException {
+        if (existsInSocialNetwork(p1) && existsInSocialNetwork(p2)) {
+            Relationship r = new Relationship(p1, p2);
+            if (relationList.contains(r)) throw new RelationshipAlreadyAtSocialNetwork();
+            else relationList.add(r);
+        }
+        else throw new PersonNotFoundException();
     }
     /**
      * Adds all the relations that the specified file contains.
@@ -262,6 +368,8 @@ public class SocialNetwork {
      */
     private void addRelationsFromFile(String filename) {
         File f = new File("files/" + filename);
+        int al = 0;
+        int nf = 0;
         try {
             Scanner sf = new Scanner(f);
             String sexample = "friend1,friend2";
@@ -275,155 +383,27 @@ public class SocialNetwork {
             else {
                 System.err.println("Error: File data is not in required format");
             }
+        } catch (RelationshipAlreadyAtSocialNetwork e) {
+            al++;
+        } catch (PersonNotFoundException e) {
+            nf++;
         } catch (FileNotFoundException e) {
             System.err.println("Error: File was not found");
         }
+        if (al > 0) System.out.println("Error: " + al + "realtionship(s) were already at the network");
+        if (nf > 0) System.out.println("Error: " + nf + "realtionship(s) couldn't be added; at least one person was not found");
     }
-    // TODO Check if relation already exists in the Social Network
+
+    private boolean existsInSocialNetwork(String ID) {
+        int i = 0;
+        if (personList.isEmpty()) return false;
+        while (i < personList.size()) {
+            if (personList.get(i).getIdentifier().equals(ID)) return true;
+        }
+        return false;
+    }
 
     // 2nd milestone
-    /**
-     * Given a surname, prints the friends of the user(s) with that surname in the console.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     */
-    private void printFriendsBySurnameToConsole(String surname) {
-        try {
-            System.out.println(findFriendsBySurname(surname));
-        } catch (PersonNotFoundException e) {
-            System.err.println("Error: A Person does not exist in the Social Network");
-        }
-    }
-    /**
-     * Given a surname, prints the friends of the user(s) with that surname in the specified file.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     * @param filename File where we want to save the information.
-     */
-    private void printFriendsBySurnameToFile(String surname, String filename) {
-        File f = new File("files/" + filename);
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(f);
-            fw.write(findFriendsBySurname(surname));
-            fw.close();
-        } catch (IOException e) {
-            System.err.println("Error: File was not found");
-        } catch (PersonNotFoundException e) {
-            System.err.println("Error: A Person does not exist in the Social Network");
-        }
-    }
-    /**
-     * Given a surname, returns a String with the friends of the user(s) with that surname.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     * @return A String with the friends of the user(s) with that surname.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that surname.
-     */
-    private String findFriendsBySurname(String surname) throws PersonNotFoundException {
-        String s = "";
-        ArrayList<Person> arr = findPersonBySurname(surname);
-        String id;
-        for (Person p: arr) {
-            id = p.getIdentifier();
-            s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
-            for(int i = 0; i < relationList1.size(); i++) { // Always relationList1.size() == relationList2.size()
-                if(relationList1.get(i).equals(id)) {
-                    s += findPersonByID(relationList2.get(i)).getBasicInfo() + "\n";
-                }
-                else if (relationList2.get(i).equals(id)) {
-                    s += findPersonByID(relationList1.get(i)).getBasicInfo() + "\n";
-                }
-            }
-            s += "\n";
-        }
-        return s;
-    }
-    /**
-     * Given an ID, returns the Person instance with the specified ID.
-     * @param identifier ID of the Person that we want.
-     * @return Person that has the given ID.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that ID.
-     */
-    private Person findPersonByID(String identifier) throws PersonNotFoundException {
-        ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getIdentifier().equals(identifier)) {
-                return p;
-            }
-        }
-        throw new PersonNotFoundException();
-    }
-    /**
-     * Given a surname, finds the Person(s) in the SocialNetwork with that surname and returns them in an
-     * ArrayList of Person.
-     * @param surname Surname of the person(s) that we want to find.
-     * @return ArrayList of Persons in the SocialNetwork with that surname.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that surname.
-     */
-    private ArrayList<Person> findPersonBySurname(String surname) throws PersonNotFoundException {
-        ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getSurname().equals(surname)) {
-                arr.add(p);
-            }
-        }
-        if (arr.isEmpty()) {
-            throw new PersonNotFoundException();
-        }
-        return arr;
-    }
-    /**
-     * Given a city, prints in the console the person(s) basic information of the ones that were born in the given city.
-     * @param city Birthplace of the person(s) that we want to find.
-     */
-    private void printPeopleBornInCityToConsole(String city) {
-        try {
-            System.out.println(findPeopleBornInCity(city));
-        } catch (PersonNotFoundException e) {
-            System.err.println("Error: No one in the Social Network has born there");
-        }
-    }
-    /**
-     * Given a city, prints in the specified file the person(s) basic information of the ones that were born
-     * in the given city.
-     * @param city Birthplace of the person(s) that we want to find.
-     * @param filename File where we want to save the information.
-     */
-    private void printPeopleBornInCityToFile(String city, String filename) {
-        File f = new File("files/" + filename);
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(f);
-            fw.write(findPeopleBornInCity(city));
-            fw.close();
-        } catch (IOException e) {
-            System.err.println("Error: File was not found");
-        } catch (PersonNotFoundException e) {
-            System.err.println("Error: No one in the Social Network has born there");
-        }
-    }
-    /**
-     * Given a city, finds the person(s) basic information that were born in the given city.
-     * @param city Birthplace of the person(s) that we want to find.
-     * @throws PersonNotFoundException If no one in the SocialNetwork have been born in that city.
-     */
-    private String findPeopleBornInCity(String city) throws PersonNotFoundException {
-        String s = "These are the user's born in " + city + ":\n";
-        String bplace;
-        int n = 0;
-        for (Person p: personList) {
-            bplace = p.getBirthplace();
-            if (bplace.equals(city)) {
-                s += p.getBasicInfo() + "\n";
-                n++;
-            }
-        }
-        if (n==0) {
-            throw new PersonNotFoundException();
-        }
-        else {
-            return s;
-        }
-    }
-    // TODO Implement search function that has all the different searches
 
     // 3rd milestone
 
