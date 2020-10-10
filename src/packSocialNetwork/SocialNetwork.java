@@ -2,7 +2,7 @@ package packSocialNetwork;
 
 import packSocialNetworkExceptions.PersonAlreadyAtSocialNetwork;
 import packSocialNetworkExceptions.PersonNotFoundException;
-import packSocialNetworkExceptions.RelationshipAlreadyAtSocialNetwork;
+import packSocialNetworkExceptions.RelationAlreadyAtSocialNetwork;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ public class SocialNetwork {
 
     // Attributes
     private ArrayList<Person> personList;
-    private ArrayList<Relationship> relationList;
+    private ArrayList<Relation> relationList;
     private static SocialNetwork instance;
     private final Scanner sc = new Scanner(System.in);
 
@@ -65,7 +65,7 @@ public class SocialNetwork {
     private void printInitialMenu() {
         System.out.println("\nSocial Network menu:");
         printAddPersonPeople();
-        printAddRelationships();
+        printAddRelations();
         printPrintOut();
         printFind();
         System.out.println("5. Log out \n \n");
@@ -76,9 +76,9 @@ public class SocialNetwork {
                         "    M. Manually \n" +
                         "    F. File ");
     }
-    private void printAddRelationships() {
+    private void printAddRelations() {
         System.out.println(
-                        "2. Add relationships: \n" +
+                        "2. Add relation(s): \n" +
                         "    M. Manually \n" +
                         "    F. File ");
     }
@@ -98,11 +98,6 @@ public class SocialNetwork {
                         "    5. Chain \n" +
                         "    6. Cliques ");
     }
-    private void printFindFriendsBySurname(String next) {
-        System.out.println("Find friends by surname: ");
-
-
-    }
     /**
      * Request user to select an option and do what was specified in the menu, if selected option does not
      * exist, will call the program recursively.
@@ -117,7 +112,7 @@ public class SocialNetwork {
                     addPersonPeopleSelected();
                     break;
                 case 2:
-                    addRelationshipsSelected();
+                    addRelationsSelected();
                     break;
                 case 3:
                     printOutSelected();
@@ -128,51 +123,13 @@ public class SocialNetwork {
                 case 5:
                     System.out.println("Logging out...");
                     break;
-                    /*
-                    System.out.print("Write the surname: ");
-                    fna = sc.next();
-                    fn = "Input";
-                    while (!((fn.equals("C")) | (fn.equals("F")))) {
-                        System.out.print("Print to the console (C) or to a file (F): ");
-                        fn = sc.next();
-                    }
-                    if (fn.equals("C")) {
-                        printFriendsBySurnameToConsole(fna);
-                    } else {
-                        System.out.print("Write the name of the file: ");
-                        fn = sc.next();
-                        printFriendsBySurnameToFile(fna, fn);
-                    }
-                    break;
-                case 6:
-                    System.out.print("Write the city: ");
-                    fna = sc.next();
-                    fn = "Input";
-                    while (!((fn.equals("C")) | (fn.equals("F")))) {
-                        System.out.print("Print to the console (C) or to a file (F): ");
-                        fn = sc.next();
-                    }
-                    if (fn.equals("C")) {
-                        printPeopleBornInCityToConsole(fna);
-                    } else {
-                        System.out.print("Write the name of the file: ");
-                        fn = sc.next();
-                        printPeopleBornInCityToFile(fna, fn);
-                    }
-                    break;
-                case 7:
-                    System.out.println("Logging out...");
-                    break;
-                     */
                 default:
                     break;
             }
             if (option != 5) {
                 try {
                     TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-
-                }
+                } catch (InterruptedException e) { }
                 printInitialMenu();
             }
         } while (option != 5);
@@ -225,10 +182,10 @@ public class SocialNetwork {
         }
     }
     /**
-     * Prints Add relationship option and performs task.
+     * Prints Add relation option and performs task.
      */
-    private void addRelationshipsSelected() {
-        printAddRelationships();
+    private void addRelationsSelected() {
+        printAddRelations();
         String to;
         do {
             System.out.println("Manually (M) or File (F)");
@@ -242,10 +199,12 @@ public class SocialNetwork {
                 String s = sc.next();
                 String[] sa = s.split(",");
                 addRelation(sa[0], sa[1]);
-            } catch (RelationshipAlreadyAtSocialNetwork e) {
-                System.out.println("That relationship is already at the network");
+            } catch (RelationAlreadyAtSocialNetwork e) {
+                System.out.println("Error: That relation is already at the network");
+            } catch (PersonNotFoundException e) {
+                System.out.println("Error: The realtion couldn't be added; at least one ID was not found on SocialNetwork");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("There was an error with your input");
+                System.out.println("Error: There was an error with your input");
             }
         }
         else {
@@ -275,6 +234,9 @@ public class SocialNetwork {
             printPeopleToFile(sc.next());
         }
     }
+    /**
+     * Prints Find option and performs task.
+     */
     private void printFindSelected() {
         printFind();
         int to = 0;
@@ -322,7 +284,6 @@ public class SocialNetwork {
                 break;
         }
     }
-
     /**
      * Adds a person to the Social Netowork.
      * @param data Data of the person.
@@ -412,13 +373,14 @@ public class SocialNetwork {
      * @param p1 User ID of one person.
      * @param p2 User ID of the other person.
      */
-    private void addRelation(String p1, String p2) throws RelationshipAlreadyAtSocialNetwork, PersonNotFoundException {
+    private void addRelation(String p1, String p2) throws RelationAlreadyAtSocialNetwork, PersonNotFoundException {
         if (existsInSocialNetwork(p1) && existsInSocialNetwork(p2)) {
-            Relationship r = new Relationship(p1, p2);
-            if (relationList.contains(r)) throw new RelationshipAlreadyAtSocialNetwork();
+            Relation r = new Relation(p1, p2);
+            if (relationList.contains(r)) throw new RelationAlreadyAtSocialNetwork();
             else relationList.add(r);
         }
         else throw new PersonNotFoundException();
+
     }
     /**
      * Adds all the relations that the specified file contains.
@@ -441,7 +403,7 @@ public class SocialNetwork {
                     try {
                         arr = sf.nextLine().split(",");
                         addRelation(arr[0], arr[1]);
-                    } catch (RelationshipAlreadyAtSocialNetwork e) {
+                    } catch (RelationAlreadyAtSocialNetwork e) {
                         al++;
                     } catch (PersonNotFoundException e) {
                         nf++;
@@ -456,7 +418,7 @@ public class SocialNetwork {
             System.out.println("Error: File can not be found");
         }
         if (al > 0) System.out.println("Error: " + al + " realtionship(s) already at the network");
-        if (nf > 0) System.out.println("Error: " + nf + " realtionship(s) couldn't be added; at least one ID was not found on SocialNetwork ");
+        if (nf > 0) System.out.println("Error: " + nf + " realtionship(s) couldn't be added; at least one ID was not found on SocialNetwork");
     }
     /**
      * Checks if one person exists in the social network given the ID (identifier).
@@ -521,7 +483,7 @@ public class SocialNetwork {
         for (Person p: arr) {
             id = p.getIdentifier();
             s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
-            for (Relationship r: relationList) {
+            for (Relation r: relationList) {
                 if (r.getPerson1().equals(id)) {
                     s += findPersonByID(r.getPerson2()).getBasicInfo() + "\n";
                 }
