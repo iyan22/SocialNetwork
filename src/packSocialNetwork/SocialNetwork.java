@@ -263,11 +263,11 @@ public class SocialNetwork {
                 } while (!(tos.equals("C") || tos.equals("F")));
                 System.out.print("Write the surname: ");
                 String sn = sc.next();
-                if (tos.equals("C")) printFriendsBySurnameToConsole(sn);
+                if (tos.equals("C")) {}//printFriendsBySurnameToConsole(sn);
                 else {
                     System.out.println("The file will be on 'files/' directory.");
                     System.out.print("Enter the name of the file: ");
-                    printFriendsBySurnameToFile(sn, sc.next());
+                    //printFriendsBySurnameToFile(sn, sc.next());
 
                 }
 
@@ -436,99 +436,6 @@ public class SocialNetwork {
     }
 
     // 2nd milestone
-    /**
-     * Given an ID, returns the Person instance with the specified ID.
-     * @param identifier ID of the Person that we want.
-     * @return Person that has the given ID.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that ID.
-     */
-    private Person findPersonByID(String identifier) throws PersonNotFoundException {
-        ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getIdentifier().equals(identifier)) {
-                return p;
-            }
-        }
-        throw new PersonNotFoundException();
-    }
-    /**
-     * Given a surname, finds the Person(s) in the SocialNetwork with that surname and returns them in an
-     * ArrayList of Person.
-     * @param surname Surname of the person(s) that we want to find.
-     * @return ArrayList of Persons in the SocialNetwork with that surname.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that surname.
-     */
-    private ArrayList<Person> findPersonBySurname(String surname) throws PersonNotFoundException {
-        ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getSurname().equals(surname)) {
-                arr.add(p);
-            }
-        }
-        if (arr.isEmpty()) {
-            throw new PersonNotFoundException();
-        }
-        return arr;
-    }
-    /**
-     * Given a surname, returns a String with the friends of the user(s) with that surname.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     * @return A String with the friends of the user(s) with that surname.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that surname.
-     */
-    private String findFriendsBySurname(String surname) throws PersonNotFoundException {
-        String s = "";
-        ArrayList<Person> arr = findPersonBySurname(surname);
-        String id;
-        for (Person p: arr) {
-            id = p.getIdentifier();
-            s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
-            for (Relation r: relationList) {
-                if (r.getPerson1().equals(id)) {
-                    s += findPersonByID(r.getPerson2()).getBasicInfo() + "\n";
-                }
-                else if (r.getPerson2().equals(id)) {
-                    s += findPersonByID(r.getPerson1()).getBasicInfo() + "\n";
-                }
-            }
-            s += "\n";
-        }
-        return s;
-    }
-    /**
-     * Given a surname, prints the friends of the user(s) with that surname in the console.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     */
-    private void printFriendsBySurnameToConsole(String surname) {
-        try {
-            System.out.println(findFriendsBySurname(surname));
-        } catch (PersonNotFoundException e) {
-            System.out.println("Error: Does not exist no one with that surname in the SocialNetwork");
-        }
-    }
-    /**
-     * Given a surname, prints the friends of the user(s) with that surname in the specified file.
-     * @param surname Surname of the person(s) that we want to know his/her friends.
-     * @param filename File where we want to save the information.
-     */
-    private void printFriendsBySurnameToFile(String surname, String filename) {
-        File f;
-        FileWriter fw;
-        String s =  "";
-        try {
-            f = new File("files/" + filename);
-            fw = new FileWriter(f);
-            s += findFriendsBySurname(surname);
-            fw.write(s);
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("Error: File was not found");
-        } catch (PersonNotFoundException e) {
-            System.out.println("Error: Does not exist no one with that surname in the SocialNetwork");
-        }
-    }
-
-
 
 
     // 3rd milestone
