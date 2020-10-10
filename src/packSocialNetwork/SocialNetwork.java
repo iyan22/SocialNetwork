@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * SocialNetwork contains people information and the relations between them if exist.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
- * @author Iyán Álvarez
- * @version firstIyan
+ * @author Iyan Alvarez and Davy Wellinger
+ * @version firstMilestone
  */
 public class SocialNetwork {
 
