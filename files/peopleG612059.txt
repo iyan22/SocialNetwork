@@ -1,0 +1,5 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Kofi44,Kofi,Darko,31-05-1996,male,Durango,Durango,Fray Juan;UPV,Durango,Django;The Prestige;Full Metal Jacket,G612059
+Leire99,Leire,Cartagena,08-04-2001,female,Eibar,Eibar,San Andres;UPV,Eibar,Titanic;Harry Potter;The Hunger Games,G612059
+Olarizu13,Olarizu,Gonzalo,13-05-1998,female,Vitoria,Vitoria,Jesus Obrero;UPV,Vitoria,Godfellas;RocknRolla;Green Book,G612059
+Patxi7,Patxi,Lopez,04-11-1959,Baracaldo,male,Baracaldo,Bilbao,Emilio Campuzano;Deusto,Euskadi,Twiglight;Moonlight;Titanic,G612059

@@ -1,0 +1,16 @@
+friend1,friend2
+Maria82,Rose2
+Maria82,Frost639
+Maria82,Agustin4
+Maria82,Eneko777
+Maria82,Kepa11
+Rose2,Frost639
+Rose2,Agustin4
+Rose2,Eneko777
+Rose2,Kepa11
+Frost639,Agustin4
+Frost639,Eneko777
+Frost639,Kepa11
+Agustin4,Eneko777
+Agustin4,Kepa11
+Eneko777,Kepa11

@@ -1,0 +1,8 @@
+idperson,name,lastname,birthdate,birthplace,home,studiedat,workplaces,films,groupcode
+Peru57,Peru,Aramburu,3-5-2001,Berlin,Donostia;Berlin,Brujas,Donostia,Up;Cloud Atlas,G23043
+Iker6199,Iker,Zaldua,17-7-2001,Donostia,Zubieta,Donostia,-,Shrek;Shrek 2,G34121
+Ainhoa34,Ainhoa,Figueras,30-7-2001,Donostia,Donostia,Gazteiz;Lasarte-Oria,Donostia;Gazteiz,Space Odyssei 2001,G23931
+Pepe77,Don Pepe,Balloon,3-10-2003,Los Angeles,San Francisco,San Francisco,New York,Tiana,G77371
+Amaia21,Amaia,Gutierrez,30-1-2001,Madrid,Donostia;Bilbao,Donostia,Bilbao,Pokemon,G11333
+Ane52,Ane,García,5-4-2000,Bilbao,Bilbao,Bilbao;Donostia,Bilbao,Forrest Gump,G5555
+		

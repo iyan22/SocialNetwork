@@ -1,0 +1,6 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+AlexelC4P0,Alejandro,Capo,1-1-1939,male,Mallorca,Mallorca,EHU,Mallorca,The Simpsons;Tenet;Origen,G612053
+Vegetta777,Samuel,de Luque,12-4-1989,male,Madrid,Miami,UPV,Madrid;Valencia;Miami,Doraemon;Wigetta;Origen,G612053
+WillyR3X,Guillermo,Diaz Ibáñez,9-5-1993,male,Madrid,Madrid,UPM,Los Angeles;Andorra;Madrid,Sin Chan;The Simpsons,G612053
+Abby666,Abril,Añañin,10-2-2000,female,Mallorca,Mallorca,EHU,Mallorca,Origen;Your Name,G612053
+StaXX,Frank,Ramírez Garnes García,18-8-1992,male,Barcelona,Andorra,UB,Barcelona;Madrid;Andorra,La Isla de las Tentaciones,G612053

@@ -1,0 +1,6 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Mikel13,Mikel,Aristu,13-05-2001,male,Arrasate,Legazpi,Olazabal;Legazpi,Legazpi;Donosti,Avatar;Karate Kid,G612057
+Andrea666,Andrea,Torres,29-03-1999,female,Boston,Boston,Oxford;Oxford,Oxford;New York;Donosti,no films,G612057
+Alejandro23,Alejandro,Sanchez,04-02-2000,male,Irun,Irun,La Salle;Irun,Irun;Valencia;Madrid;Barcelona,Blood Quantum;Predator 2,G612057
+Pepito45,Pepe,Gonzalez,18-11-2005,male,Donosti,Donostia,San Patricio;Donosti,Donosti,The Matrix,G612057
+

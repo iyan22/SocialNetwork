@@ -1,0 +1,7 @@
+Fernando33,Fernando,González,26-12-2000,male,Galdakao,Algorta;Getxo,Geroa;Haizerrota,Donostia;Ciudad de Mejico,Regreso al Futuro,G612055
+Erik26,Erik,Aranburu,30-05-2000,male,Donostia,Zarautz,Salbatore Mitxelena,Megalodon,G612055
+Aritz2,Aritz,Blanco,8-12-2001,male,Donostia,Errenteria,Langaitz,Larun;Lesaka;Altsasu,Olentzero The Film,G612055
+Eneko82,Eneko,Amor,16-01-2001,male,Donostia,Barakaldo,Munoa,Arantza;Igantzi;Tudela,Pirates of the Caribbean,G612055
+Olaia121,Olaia,Pikabea,07-10-2001,female,Donostia,Bera,Labiaga,Mungia;Itsasondo;Getaria;Zumaia;Itziar,Passenger;The Hunger games,G612055
+Arua42,Aroa,Martin,27-12-2001,female,Donosti,Bera,Labiaga,London;Leitza;Goizueta;Los Angeles,Enola Holmes;Oceans 11,G612055
+Mikel1,Mikel,Irigoien,20-11-2001,male,Donosti,Lesaka,Toki Ona,Cascante;Lleida;Barcelona,Fast&Furious 7;Sing!, G612055

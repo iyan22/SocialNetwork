@@ -1,0 +1,7 @@
+friend1, friend2
+Jon121,Iker3
+Jon121,Fer12
+Jon121,Pancracio99
+Iker3,Fer12
+Iker3,Pancracio99
+Fer12,Pancracio99

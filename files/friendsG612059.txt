@@ -1,0 +1,7 @@
+friend1,friend2
+Kofi44,Leire99
+Kofi44,Patxi7
+Kofi44,Olarizu13
+Leire99,Patxi7
+Leire99,Olarizu13
+Patxi7,Olarizu13

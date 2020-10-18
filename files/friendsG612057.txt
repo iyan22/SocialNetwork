@@ -1,0 +1,7 @@
+friend1,friend2
+Mikel13,Andrea666
+Mikel13,Alejandro23
+Mikel13,Pepito45
+Andrea666,Alejandro23
+Andrea666,Pepito45
+Alejandro23,Pepito45
