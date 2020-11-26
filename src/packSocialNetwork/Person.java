@@ -5,9 +5,9 @@ package packSocialNetwork;
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez
- * @version firstIyan
+ * @version secondIyan
  */
-public class Person {
+public class Person implements Comparable<Person> {
 
     // Attributes
     private String identifier;
@@ -85,7 +85,7 @@ public class Person {
      * @return Values of ID, Name and Surname separated by blanks.
      */
     public String getBasicInfo() {
-        return identifier + " " + name + " " + surname;
+        return identifier + " " + surname;
     }
     /**
      * Compares a Person with the given Object and returns true if the ID, name and surname are the same.
@@ -134,5 +134,38 @@ public class Person {
         return  identifier + "," + name + "," + surname + "," + birthdate + "," + gender + "," +
                 birthplace + "," + home + "," + studydataS + "," + workdataS +
                 "," + moviesS + "," + groupcode;
+    }
+    /**
+     * Compares a Person with the given Person by the ID, and if needed by name and by surname.
+     * @param o The other Person to be compared.
+     * @return a negative integer, zero, or a positive integer as this person is lexicographically less than, equal to, or greater than the specified object.
+     */
+    @Override public int compareTo(Person o) {
+        int res;
+        if (this.identifier.compareTo(o.getIdentifier()) == 0) {
+            if (this.name.compareTo(o.getName()) == 0) {
+                if (this.surname.compareTo(o.getSurname()) == 0) {
+                    res = 0;
+                }
+                else if (this.surname.compareTo(o.getSurname()) < 0) {
+                    res = -1;
+                } else {
+                    res = 1;
+                }
+            }
+            else if (this.name.compareTo(o.getName()) < 0) {
+                res = -1;
+            }
+            else {
+                res = 1;
+            }
+        }
+        else if (this.identifier.compareTo(o.getIdentifier()) < 0) {
+            res = -1;
+        }
+        else {
+            res = 1;
+        }
+        return res;
     }
 }

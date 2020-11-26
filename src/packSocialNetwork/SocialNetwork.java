@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
 /**
  * SocialNetwork contains people information and the relations between them if exist.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
@@ -126,12 +124,7 @@ public class SocialNetwork {
                 default:
                     break;
             }
-            if (option != 5) {
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) { }
-                printInitialMenu();
-            }
+            if (option != 5) printInitialMenu();
         } while (option != 5);
         sc.close();
     }
@@ -248,31 +241,47 @@ public class SocialNetwork {
             } catch (InputMismatchException e) {
                 System.out.println("Error: Introduce a number from 1 to 6 (both included)");
             }
-        } while (to < 1 && 6 < to);
+        } while (to < 1 || 6 < to);
         switch (to) {
             case 1:
                 System.out.println("You have selected: ");
                 System.out.println( "1. Friends of the person given the surname \n" +
                                     "    C. Console \n" +
                                     "    F. File ");
-                String tos;
+                String tos1;
                 do {
                     System.out.println("Console (C) or File (F)");
                     System.out.print("\nEnter C or F: ");
-                    tos = sc.next();
-                } while (!(tos.equals("C") || tos.equals("F")));
+                    tos1 = sc.next();
+                } while (!(tos1.equals("C") || tos1.equals("F")));
                 System.out.print("Write the surname: ");
-                String sn = sc.next();
-                if (tos.equals("C")) printFriendsBySurnameToConsole(sn);
+                String sn1 = sc.next();
+                if (tos1.equals("C")) printFriendsBySurnameToConsole(sn1);
                 else {
                     System.out.println("The file will be on 'files/' directory.");
                     System.out.print("Enter the name of the file: ");
-                    printFriendsBySurnameToFile(sn, sc.next());
-
+                    printFriendsBySurnameToFile(sn1, sc.next());
                 }
-
                 break;
             case 2:
+                System.out.println("You have selected: ");
+                System.out.println( "2. People born in specified city \n" +
+                        "    C. Console \n" +
+                        "    F. File ");
+                String tos2;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos2 = sc.next();
+                } while (!(tos2.equals("C") || tos2.equals("F")));
+                System.out.print("Write the city: ");
+                String sn2 = sc.next();
+                if (tos2.equals("C")) printPersonByCityToConsole(sn2);
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printPersonByCityToFile(sn2, sc.next());
+                }
                 break;
             case 3:
                 break;
@@ -285,27 +294,31 @@ public class SocialNetwork {
         }
     }
     /**
-     * Adds a person to the Social Netowork.
+     * Adds a person to the Social Network in lexicographical order.
      * @param data Data of the person.
      *             Must follow the specified format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
      * @throws PersonAlreadyAtSocialNetwork If the person's ID already exists in the Social Network.
      */
     private void addPerson(String data) throws PersonAlreadyAtSocialNetwork {
         String[] d = data.split(",");
-        for (Person p: personList) {
-            if (p.getIdentifier().equals(d[0])) {
-                throw new PersonAlreadyAtSocialNetwork();
-            }
-        }
+        Person np = null;
         try {
             String[] d7 = d[7].split(";");
             String[] d8 = d[8].split(";");
             String[] d9 = d[9].split(";");
-            Person p = new Person(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d7, d8, d9, d[10]);
-            personList.add(p);
+            np = new Person(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d7, d8, d9, d[10]);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There was an error with your input\n");
         }
+        int i = 0;
+        boolean inserted = false;
+        while (i < personList.size() && !inserted) {
+            Person p = personList.get(i);
+            if (p.equals(np)) throw new PersonAlreadyAtSocialNetwork();
+            else if (p.compareTo(np) < 0) i++;
+            else inserted = true;
+        }
+        personList.add(i,np);
     }
     /**
      * Adds all the people from the file to the Social Network.
@@ -380,7 +393,6 @@ public class SocialNetwork {
             else relationList.add(r);
         }
         else throw new PersonNotFoundException();
-
     }
     /**
      * Adds all the relations that the specified file contains.
@@ -426,31 +438,43 @@ public class SocialNetwork {
      * @return true  iif specified ID is associated to a person of the social network; otherwise false.
      */
     private boolean existsInSocialNetwork(String ID) {
-        int i = 0;
-        if (personList.isEmpty()) return false;
-        while (i < personList.size()) {
-            if (personList.get(i).getIdentifier().equals(ID)) return true;
-            i++;
+        try {
+            if (binarySearchPersonID(ID) != null) return true;
         }
+        catch (PersonNotFoundException ignored) {}
         return false;
     }
-
-    // 2nd milestone
     /**
-     * Given an ID, returns the Person instance with the specified ID.
-     * @param identifier ID of the Person that we want.
-     * @return Person that has the given ID.
-     * @throws PersonNotFoundException If no one in the SocialNetwork has that ID.
+     * Makes a binary search in the ArrayList ordered by the ID
+     * Frontend method
+     * @param id ID of the Person to search in the SocialNetwork
+     * @return The person instance if found
+     * @throws PersonNotFoundException if the Person does not exist in the SocialNetwork
      */
-    private Person findPersonByID(String identifier) throws PersonNotFoundException {
-        ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getIdentifier().equals(identifier)) {
-                return p;
-            }
+    private Person binarySearchPersonID(String id) throws PersonNotFoundException {
+        return binarySearchPersonIDBack(id, 0, personList.size());
+    }
+    /**
+     * Makes a binary search in the ArrayList ordered by the ID
+     * Backend method
+     * @param id ID of the Person to search in the SocialNetwork
+     * @param left Left limit of the ArrayList
+     * @param right Right limit of the ArrayList
+     * @return The person instance if found
+     * @throws PersonNotFoundException if the Person does not exist in the SocialNetwork
+     */
+    private Person binarySearchPersonIDBack(String id, int left, int right) throws PersonNotFoundException {
+        if (right >= left) {
+            int mid = left + (right - left) / 2;
+            String actualid = personList.get(mid).getIdentifier();
+            if (actualid.equals(id)) return personList.get(mid);
+            if (actualid.compareTo(id) > 0) return binarySearchPersonIDBack(id , left, mid - 1);
+            return binarySearchPersonIDBack(id, mid + 1, right);
         }
         throw new PersonNotFoundException();
     }
+
+    // 2nd milestone
     /**
      * Given a surname, finds the Person(s) in the SocialNetwork with that surname and returns them in an
      * ArrayList of Person.
@@ -485,10 +509,10 @@ public class SocialNetwork {
             s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
             for (Relation r: relationList) {
                 if (r.getPerson1().equals(id)) {
-                    s += findPersonByID(r.getPerson2()).getBasicInfo() + "\n";
+                    s += binarySearchPersonID(r.getPerson2()).getBasicInfo() + "\n";
                 }
                 else if (r.getPerson2().equals(id)) {
-                    s += findPersonByID(r.getPerson1()).getBasicInfo() + "\n";
+                    s += binarySearchPersonID(r.getPerson1()).getBasicInfo() + "\n";
                 }
             }
             s += "\n";
@@ -519,6 +543,72 @@ public class SocialNetwork {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
             s += findFriendsBySurname(surname);
+            fw.write(s);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        } catch (PersonNotFoundException e) {
+            System.out.println("Error: Does not exist no one with that surname in the SocialNetwork");
+        }
+    }
+    /**
+     * Given a city, finds the Person(s) in the SocialNetwork that have born in that city and returns them
+     * in an ArrayList of Person.
+     * @param city City of the person(s) that we want to find.
+     * @return ArrayList of Persons in the SocialNetwork that have born in that city.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
+     */
+    private ArrayList<Person> findPersonByCity(String city) throws PersonNotFoundException {
+        ArrayList<Person> arr = new ArrayList<>();
+        for (Person p: personList) {
+            if (p.getBirthplace().equals(city)) {
+                arr.add(p);
+            }
+        }
+        if (arr.isEmpty()) {
+            throw new PersonNotFoundException();
+        }
+        return arr;
+    }
+    /**
+     * Given a city, returns a String with the basic info of the user(s) born in that city.
+     * @param city City of the person(s) that we want to know.
+     * @return A String with the basic info of the user(s) born in the given city.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
+     */
+    private String findPersonByCityString(String city) throws PersonNotFoundException {
+        String s = "The user(s) born in " + city + "is/are:\n";
+        ArrayList<Person> arr = findPersonByCity(city);
+        String id;
+        for (Person p: arr) {
+            s += p.getBasicInfo() + "\n";
+        }
+        return s;
+    }
+    /**
+     * Given a city, prints the user(s) basic info that has born in the given city in the console.
+     * @param city City of the person(s) that we want to know.
+     */
+    private void printPersonByCityToConsole(String city) {
+        try {
+            System.out.println(findPersonByCityString(city));
+        } catch (PersonNotFoundException e) {
+            System.out.println("Error: Does not exist no one that has born there in the SocialNetwork");
+        }
+    }
+    /**
+     * Given a city, prints the user(s) basic info that has born in the given city in the specified file.
+     * @param city City of the person(s) that we want to know.
+     * @param filename File where we want to save the information.
+     */
+    private void printPersonByCityToFile(String city, String filename) {
+        File f;
+        FileWriter fw;
+        String s =  "";
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s += findPersonByCityString(city);
             fw.write(s);
             fw.close();
         } catch (IOException e) {
