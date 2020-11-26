@@ -284,6 +284,26 @@ public class SocialNetwork {
                 }
                 break;
             case 3:
+                System.out.println("You have selected: ");
+                System.out.println( "3. People born between two dates \n" +
+                        "    C. Console \n" +
+                        "    F. File ");
+                String tos3;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos3 = sc.next();
+                } while (!(tos3.equals("C") || tos3.equals("F")));
+                System.out.print("Write the initial year: ");
+                String sn31 = sc.next();
+                System.out.print("Write the limit year: ");
+                String sn32 = sc.next();
+                if (tos3.equals("C")) printPersonBetweenDatesToConsole(Integer.parseInt(sn31), Integer.parseInt(sn32));
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printPersonBetweenDatesToFile(Integer.parseInt(sn31), Integer.parseInt(sn32), sc.next());
+                }
                 break;
             case 4:
                 break;
@@ -619,6 +639,81 @@ public class SocialNetwork {
     }
 
 
+    /**
+     * Given two dates, finds the Person(s) in the SocialNetwork born between the given years an return them in a
+     * sorted ArrayList of Person.
+     * Pre: Year 1 <= Year2.
+     * @param year1 Start year (included).
+     * @param year2 Limit year (included).
+     * @return ArrayList of Persons in the SocialNetwork born between the given years sorted.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has born between that years.
+     */
+    private ArrayList<Person> findPersonBetweenDates(int year1, int year2) throws PersonNotFoundException {
+        ArrayList<Person> arr = new ArrayList<>();
+        for (Person p: personList) {
+            int bdy = p.getBirthdateYear();
+            if (year1 <= bdy && bdy <= year2) {
+                arr.add(p);
+            }
+        }
+        if (arr.isEmpty()) {
+            throw new PersonNotFoundException();
+        }
+        // TODO Sort the array HOW??
+        return arr;
+    }
+    /**
+     * Given two dates, finds the Person(s) in the SocialNetwork born between the given years an return them in a
+     * sorted ArrayList of Person.
+     * Pre: Year 1 <= Year2.
+     * @param year1 Start year (included).
+     * @param year2 Limit year (included).
+     * @return A String with the basic info of the user(s) born in the given city.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
+     */
+    private String findPersonBetweenDatesString(int year1, int year2) throws PersonNotFoundException {
+        String s = "The user(s) born between " + year1 + " and " + year2 + " is/are:\n";
+        ArrayList<Person> arr = findPersonBetweenDates(year1, year2);
+        String id;
+        for (Person p: arr) {
+            s += p.getBasicInfo() + "\n";
+        }
+        return s;
+    }
+    /**
+     * Given two dates, prints the user(s) basic info that has born between the given years.
+     * @param year1 Start year (included).
+     * @param year2 Limit year (included).
+     */
+    private void printPersonBetweenDatesToConsole(int year1, int year2) {
+        try {
+            System.out.println(findPersonBetweenDatesString(year1, year2));
+        } catch (PersonNotFoundException e) {
+            System.out.println("Error: Does not exist no one that has born between the given dates");
+        }
+    }
+    /**
+     * Given two dates, prints the user(s) basic info that has born between the given years in the specified file.
+     * @param year1 Start year (included).
+     * @param year2 Limit year (included).
+     * @param filename File where we want to save the information.
+     */
+    private void printPersonBetweenDatesToFile(int year1, int year2, String filename) {
+        File f;
+        FileWriter fw;
+        String s =  "";
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s += findPersonBetweenDatesString(year1, year2);
+            fw.write(s);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        } catch (PersonNotFoundException e) {
+            System.out.println("Error: Does not exist no one with that has born between the given dates");
+        }
+    }
 
 
     // 3rd milestone

@@ -74,6 +74,22 @@ public class Person implements Comparable<Person> {
         return surname;
     }
     /**
+     * Getter of the user's birthdate.
+     * @return Birthdate of the person.
+     */
+    public String getBirthdate() {
+        return birthdate;
+    }
+    /**
+     * Getter of the user's birthdate year.
+     * @return Year of birthdate of the person.
+     */
+    public int getBirthdateYear() {
+        String s = "";
+        String[] sarr = birthdate.split("-");
+        return Integer.parseInt(sarr[2]);
+    }
+    /**
      * Getter of the user's birthplace.
      * @return Birthplace of the person.
      */
