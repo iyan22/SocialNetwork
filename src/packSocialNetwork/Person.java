@@ -97,6 +97,20 @@ public class Person implements Comparable<Person> {
         return birthplace;
     }
     /**
+     * Getter of the user's favourite movies.
+     * @return Favourite movies of the person.
+     */
+    public String getMovies() {
+        String moviesS = "";
+        for(int i = 0; i < movies.length; i++) {
+            moviesS += movies[i];
+            if (i < movies.length-1) {
+                moviesS += ";";
+            }
+        }
+        return moviesS;
+    }
+    /**
      * Gets the basic information of the user: ID Surname
      * @return Values of ID and Surname separated by blanks.
      */

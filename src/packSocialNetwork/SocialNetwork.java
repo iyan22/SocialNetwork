@@ -1,19 +1,19 @@
 package packSocialNetwork;
 
-import packSocialNetworkExceptions.PersonAlreadyAtSocialNetwork;
-import packSocialNetworkExceptions.PersonNotFoundException;
-import packSocialNetworkExceptions.RelationAlreadyAtSocialNetwork;
+import packSocialNetworkExceptions.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 /**
  * SocialNetwork contains people information and the relations between them if exist.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez
- * @version firstIyan
+ * @version secondIyan
  */
 public class SocialNetwork {
 
@@ -65,24 +65,36 @@ public class SocialNetwork {
         printFind();
         System.out.println("5. Log out \n \n");
     }
+    /**
+     * Prints the choices of the add person people menu.
+     */
     private void printAddPersonPeople() {
         System.out.println(
                         "1. Add person or people: \n" +
                         "    M. Manually \n" +
                         "    F. File ");
     }
+    /**
+     * Prints the choices of add relations menu.
+     */
     private void printAddRelations() {
         System.out.println(
                         "2. Add relation(s): \n" +
                         "    M. Manually \n" +
                         "    F. File ");
     }
+    /**
+     * Prints the choices of the print out menu.
+     */
     private void printPrintOut() {
         System.out.println(
                         "3. Print out people: \n" +
                         "    C. Console \n" +
                         "    F. File ");
     }
+    /**
+     * Prints the choices of the find menu.
+     */
     private void printFind() {
         System.out.println(
                         "4. Find: \n" +
@@ -90,7 +102,7 @@ public class SocialNetwork {
                         "    2. People born in specified city \n" +
                         "    3. People born between two dates \n" +
                         "    4. People born in the city of residential ID set \n" +
-                        "    5. Movies \n" +
+                        "    5. People that share favourite movies \n" +
                         "    6. Chain \n" +
                         "    7. Cliques ");
     }
@@ -323,6 +335,25 @@ public class SocialNetwork {
                 }
                 break;
             case 5:
+                System.out.println("You have selected: ");
+                System.out.println( "5. People that share favourite movies \n" +
+                        "    C. Console \n" +
+                        "    F. File");
+                String tos5;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos5 = sc.next();
+                } while (!(tos5.equals("C") || tos5.equals("F")));
+                System.out.print("Write the favourite movie: \n");
+                sc.nextLine();
+                String sn5 = sc.nextLine();
+                if (tos5.equals("C")) printPersonListMoviesToConsole(sn5);
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printPersonListMoviesToFile(sn5, sc.next());
+                }
                 break;
             case 6:
                 break;
@@ -655,7 +686,6 @@ public class SocialNetwork {
             System.out.println("Error: Does not exist no one with that surname in the SocialNetwork");
         }
     }
-
     /**
      * Given two dates, finds the Person(s) in the SocialNetwork born between the given years an return them in a
      * sorted ArrayList of Person.
@@ -731,7 +761,6 @@ public class SocialNetwork {
             System.out.println("Error: Does not exist no one with that has born between the given dates");
         }
     }
-
     /**
      * Given a city, returns a String with more info of the user(s) born in that city.
      * @param city City of the person(s) that we want to know.
@@ -798,6 +827,88 @@ public class SocialNetwork {
             System.out.println("Error: File was not found");
         }
     }
+    /**
+     * Splits Person(s) by individual favourite movies in a HashMap, where the keys are the favourite movies, and the values
+     * an ArrayList of Person that have that favourite movie in common.
+     * @return A HashMap, where the keys are the favourite movies, and the values an ArrayList of Person that have that
+     * favourite movie in common.
+     */
+    private HashMap<String, ArrayList<Person>> splitPersonByMovies() {
+        HashMap<String, ArrayList<Person>> hm = new HashMap<String, ArrayList<Person>>();
+        for (Person p: personList) {
+            String fm = p.getMovies();
+            String[] fma  = fm.split(";");
+            for (String fmai : fma) {
+                ArrayList<Person> al;
+                if (hm.containsKey(fmai)) {
+                    al = hm.get(fmai);
+                } else {
+                    al = new ArrayList<Person>();
+                }
+                al.add(p);
+                hm.put(fmai, al);
+            }
+        }
+        return hm;
+    }
+    /**
+     * Obtains the list of Person(s) that share that favourite movie in common, if exist.
+     * @param movie The title of the favourite movie.
+     * @return An ArrayList of Person(s) that have in common the given movie as favourite.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has the movie given as favourite.
+     */
+    private ArrayList<Person> getPersonListMovies(String movie) throws PersonNotFoundException {
+        HashMap<String, ArrayList<Person>> hm = splitPersonByMovies();
+        if (hm.containsKey(movie)) {
+            return hm.get(movie);
+        }
+        throw new PersonNotFoundException();
+    }
+    /**
+     * Obtains a String of Person(s) that share that favourite movie in common, if exist.
+     * @param movie The title of the favourite movie.
+     * @return A String of Person(s) basic info that have in common the given movie as favourite.
+     */
+    private String getPersonListMoviesString(String movie) {
+        String s = "";
+        try {
+            ArrayList<Person> al = getPersonListMovies(movie);
+            s = "The user(s) with favourite movie " + movie + " is/are:\n";
+            for (Person p : al) {
+                s += p.getBasicInfo() + "\n";
+            }
+        } catch (PersonNotFoundException e) {
+            System.out.println("Error: Does not exist no one with the favourite movie " + movie + "\n");
+        }
+        return s;
+    }
+    /**
+     * Prints the user(s) that share the specified favourite movies basic info in the console.
+     * @param movies Favourite movies of the users we want to find.
+     */
+    private void printPersonListMoviesToConsole(String movies) {
+        System.out.println(getPersonListMoviesString(movies));
+    }
+    /**
+     * Prints the user(s) that share the specified favourite movies basic infoin the specified file.
+     * @param movies Favourite movies of the users we want to find.
+     * @param filename File where we want to save the information.
+     */
+    private void printPersonListMoviesToFile(String movies, String filename) {
+        File f;
+        FileWriter fw;
+        String s =  "";
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s += getPersonListMoviesString(movies);
+            fw.write(s);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
+    }
+
 
 
 
