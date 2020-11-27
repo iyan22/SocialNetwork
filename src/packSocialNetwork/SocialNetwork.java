@@ -4,10 +4,7 @@ import packSocialNetworkExceptions.PersonAlreadyAtSocialNetwork;
 import packSocialNetworkExceptions.PersonNotFoundException;
 import packSocialNetworkExceptions.RelationAlreadyAtSocialNetwork;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -92,9 +89,10 @@ public class SocialNetwork {
                         "    1. Friends of the person given the surname \n" +
                         "    2. People born in specified city \n" +
                         "    3. People born between two dates \n" +
-                        "    4. Movies \n" +
-                        "    5. Chain \n" +
-                        "    6. Cliques ");
+                        "    4. People born in the city of residential ID set \n" +
+                        "    5. Movies \n" +
+                        "    6. Chain \n" +
+                        "    7. Cliques ");
     }
     /**
      * Request user to select an option and do what was specified in the menu, if selected option does not
@@ -235,13 +233,13 @@ public class SocialNetwork {
         int to = 0;
         do {
             System.out.println("Select one of the previous options (1-6)");
-            System.out.print("\nEnter 1, 2, 3, 4, 5, 6: ");
+            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7: ");
             try {
                 to = sc.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Error: Introduce a number from 1 to 6 (both included)");
             }
-        } while (to < 1 || 6 < to);
+        } while (to < 1 || 7 < to);
         switch (to) {
             case 1:
                 System.out.println("You have selected: ");
@@ -306,11 +304,31 @@ public class SocialNetwork {
                 }
                 break;
             case 4:
+                System.out.println("You have selected: ");
+                System.out.println( "4. People born in the city of residential ID set \n" +
+                        "    C. Console \n" +
+                        "    F. File \n" +
+                        "The file residential.txt must be on folder files/");
+                String tos4;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos4 = sc.next();
+                } while (!(tos4.equals("C") || tos4.equals("F")));
+                if (tos4.equals("C")) printPersonByCityResidentialToConsole();
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printPersonByCityResidentialToFile(sc.next());
+                }
                 break;
             case 5:
                 break;
             case 6:
                 break;
+            case 7:
+                break;
+
         }
     }
     /**
@@ -596,8 +614,8 @@ public class SocialNetwork {
      * @return A String with the basic info of the user(s) born in the given city.
      * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
      */
-    private String findPersonByCityString(String city) throws PersonNotFoundException {
-        String s = "The user(s) born in " + city + "is/are:\n";
+    private String findPersonByCityStringBasic(String city) throws PersonNotFoundException {
+        String s = "The user(s) born in " + city + " is/are:\n";
         ArrayList<Person> arr = findPersonByCity(city);
         String id;
         for (Person p: arr) {
@@ -611,7 +629,7 @@ public class SocialNetwork {
      */
     private void printPersonByCityToConsole(String city) {
         try {
-            System.out.println(findPersonByCityString(city));
+            System.out.println(findPersonByCityStringBasic(city));
         } catch (PersonNotFoundException e) {
             System.out.println("Error: Does not exist no one that has born there in the SocialNetwork");
         }
@@ -628,7 +646,7 @@ public class SocialNetwork {
         try {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
-            s += findPersonByCityString(city);
+            s += findPersonByCityStringBasic(city);
             fw.write(s);
             fw.close();
         } catch (IOException e) {
@@ -637,7 +655,6 @@ public class SocialNetwork {
             System.out.println("Error: Does not exist no one with that surname in the SocialNetwork");
         }
     }
-
 
     /**
      * Given two dates, finds the Person(s) in the SocialNetwork born between the given years an return them in a
@@ -714,6 +731,74 @@ public class SocialNetwork {
             System.out.println("Error: Does not exist no one with that has born between the given dates");
         }
     }
+
+    /**
+     * Given a city, returns a String with more info of the user(s) born in that city.
+     * @param city City of the person(s) that we want to know.
+     * @return A String with more info of the user(s) born in the given city.
+     * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
+     */
+    private String findPersonByCityStringMore(String city) throws PersonNotFoundException {
+        String s = "";
+        ArrayList<Person> arr = findPersonByCity(city);
+        String id;
+        for (Person p: arr) {
+            s += p.getMoreInfo() + "\n";
+        }
+        return s;
+    }
+    /**
+     * Finds the Person(s) in the SocialNetwork that have born in the same city as the ID's given in the file
+     * residential.txt in an String.
+     * Pre: The file residential.txt must be on folder files/
+     * @return String with Persons more info that have born in the city of each ID given in residential.txt.
+     */
+    private String findPersonByCityResidentialString() {
+        File f = null;
+        Scanner fr = null;
+        String s = "";
+        try {
+            f = new File("files/residential.txt");
+            fr = new Scanner(f);
+            while (fr.hasNext()) {
+                Person p = binarySearchPersonID(fr.nextLine());
+                s += p.getIdentifier() + " was born in " + p.getBirthplace() + ", and this users too:\n";
+                try {
+                    s += findPersonByCityStringMore(p.getBirthplace()) + "\n";
+                } catch (PersonNotFoundException e) {
+                    System.out.println("Error: Does not exist no one that has born in " + p.getBirthplace() + "\n");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File was not found");
+        }
+        return s;
+    }
+    /**
+     * Prints the user(s) more info of the ones that have born in the given ID's birthplace in the console.
+     */
+    private void printPersonByCityResidentialToConsole() {
+        System.out.println(findPersonByCityResidentialString());
+    }
+    /**
+     * Prints the user(s) more info of the ones that have born in the given ID's birthplace in the specified file.
+     * @param filename File where we want to save the information.
+     */
+    private void printPersonByCityResidentialToFile(String filename) {
+        File f;
+        FileWriter fw;
+        String s =  "";
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s += findPersonByCityResidentialString();
+            fw.write(s);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
+    }
+
 
 
     // 3rd milestone

@@ -97,11 +97,25 @@ public class Person implements Comparable<Person> {
         return birthplace;
     }
     /**
-     * Gets the basic information of the user: ID Name Surname
-     * @return Values of ID, Name and Surname separated by blanks.
+     * Gets the basic information of the user: ID Surname
+     * @return Values of ID and Surname separated by blanks.
      */
     public String getBasicInfo() {
         return identifier + " " + surname;
+    }
+    /**
+     * Gets the basic information of the user: Name Surname Birthplace StudyData
+     * @return Values of Name, Surname, Birthplace and StudyData separated by blanks.
+     */
+    public String getMoreInfo() {
+        String studydataS = "";
+        for(int i = 0; i < studydata.length; i++) {
+            studydataS += studydata[i];
+            if (i < studydata.length-1) {
+                studydataS += ";";
+            }
+        }
+        return name + " " + surname + " " + birthplace + " " + studydataS;
     }
     /**
      * Compares a Person with the given Object and returns true if the ID, name and surname are the same.
