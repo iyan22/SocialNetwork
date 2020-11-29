@@ -10,8 +10,8 @@ import java.util.*;
  * SocialNetwork contains people information and the relations between them if exist.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
- * @author Iyán Álvarez
- * @version secondIyan
+ * @author Iyán Álvarez and Davy Wellinger
+ * @version secondMilestone
  */
 public class SocialNetwork {
 
@@ -61,7 +61,8 @@ public class SocialNetwork {
         printAddRelations();
         printPrintOut();
         printFind();
-        System.out.println("5. Log out \n \n");
+        printSearch();
+        System.out.println("6. Log out \n \n");
     }
     /**
      * Prints the choices of the add person people menu.
@@ -101,8 +102,16 @@ public class SocialNetwork {
                         "    3. People born between two dates \n" +
                         "    4. People born in the city of residential ID set \n" +
                         "    5. People that share favourite movies \n" +
-                        "    6. Chain \n" +
-                        "    7. Cliques ");
+                        "    6. Collection of favourite movies and persons \n" +
+                        "    7. Chain \n" +
+                        "    8. Cliques ");
+    }
+    /**
+     * Prints the choices of the search menu.
+     */
+    private void printSearch(){
+        System.out.println(
+                "5. Search by attribute: \n");
     }
     /**
      * Request user to select an option and do what was specified in the menu, if selected option does not
@@ -124,16 +133,20 @@ public class SocialNetwork {
                     printOutSelected();
                     break;
                 case 4:
+                    sortPersonList("identifier");
                     printFindSelected();
                     break;
                 case 5:
+                    searchPersonPeopleSelected();
+                    break;
+                case 6:
                     System.out.println("Logging out...");
                     break;
                 default:
                     break;
             }
-            if (option != 5) printInitialMenu();
-        } while (option != 5);
+            if (option != 6) printInitialMenu();
+        } while (option != 6);
         sc.close();
     }
     /**
@@ -249,7 +262,7 @@ public class SocialNetwork {
             } catch (InputMismatchException e) {
                 System.out.println("Error: Introduce a number from 1 to 6 (both included)");
             }
-        } while (to < 1 || 7 < to);
+        } while (to < 1 || 8 < to);
         switch (to) {
             case 1:
                 System.out.println("You have selected: ");
@@ -355,11 +368,49 @@ public class SocialNetwork {
                 }
                 break;
             case 6:
+                System.out.println("You have selected: ");
+                System.out.println( "6. Collection of favourite movies and persons \n" +
+                        "    C. Console \n" +
+                        "    F. File");
+                String tos6;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos6 = sc.next();
+                } while (!(tos6.equals("C") || tos6.equals("F")));
+                if (tos6.equals("C"))
+                    System.out.println(splitPersonByMoviesString());
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printPersonListMoviesToFile(splitPersonByMoviesString(), sc.next());
+                }
                 break;
             case 7:
                 break;
-
+            case 8:
+                break;
+            default:
+                break;
         }
+    }
+    /**
+     * Method that interacts with the user to find people by attribute.
+     */
+    private void searchPersonPeopleSelected() {
+        printSearch();
+        String att;
+        String va;
+        do {
+            System.out.println("Please enter a valid attribute: \nidentifier, name, surname, birthdate, gender, birthplace, home, groupcode, studydata, workdata, movies.");
+            att = sc.next();
+        } while (!(att.equals("identifier") || att.equals("name") || att.equals("surname") || att.equals("birthdate") ||
+                att.equals("gender") || att.equals("birthplace") || att.equals("home") || att.equals("groupcode") ||
+                att.equals("studydata") || att.equals("workdata") || att.equals("movies")));
+
+        System.out.println("Great, which " +att+ " do you want to search?");
+        va = sc.next();
+        printSearchedPersonList(va,att);
     }
     /**
      * Adds a person to the Social Network in lexicographical order.
@@ -826,8 +877,6 @@ public class SocialNetwork {
             System.out.println("Error: File was not found");
         }
     }
-
-
     /**
      * Splits Person(s) by individual favourite movies in a HashMap, where the keys are the favourite movies, and the values
      * an ArrayList of Person that have that favourite movie in common.
@@ -911,9 +960,393 @@ public class SocialNetwork {
             System.out.println("Error: File was not found");
         }
     }
+    /**
+     * Splits Person(s) by individual favourite movies in a HashMap, where the keys are the favourite movies, and the values
+     * an ArrayList of Person that have that favourite movie in common.
+     * @return A String of the keys in the HashMap, where the keys are the favourite movies, and the values an ArrayList of
+     * Person that have that favourite movie in common.
+     */
+    private String splitPersonByMoviesString() {
+        String s = "";
+        ArrayList<Person> al;
+        HashMap<String, ArrayList<Person>> hm = splitPersonByMovies();
+        String[] keys = hm.keySet().toArray(new String[0]);
+        for (String sk: keys) {
+            s += sk + "\n";
+            al = hm.get(sk);
+            for (Person p: al) {
+                s += p.getBasicInfo() + "\n";
+            }
+            s += "\n";
+        }
+        return s;
+    }
+    /**
+     * Method that sorts the list containing all users by a chosen parameter.
+     * @param attribute one of the 11 attributes of a person.
+     */
+    private void sortPersonList(String attribute){
+        switch (attribute){
+            case "identifier":
+                Collections.sort(personList, Person.CprIdentifier );
+                break;
+            case "name":
+                Collections.sort(personList, Person.CprName );
+                break;
+            case "surname":
+                Collections.sort(personList, Person.CprSurname);
+                break;
+            case "birthdate":
+                Collections.sort(personList, Person.CprBirthdate );
+                break;
+            case "gender":
+                Collections.sort(personList, Person.CprGender );
+                break;
+            case "birthplace":
+                Collections.sort(personList, Person.CprBirthplace);
+                break;
+            case "home":
+                Collections.sort(personList, Person.CprHome );
+                break;
+            case "groupcode":
+                Collections.sort(personList, Person.CprGroupcode );
+                break;
+            default :
+                break;
+        }
+    }
+    /**
+     * Method that creates a list of all indexes in the peopleList that match the search.
+     * @param index Index found by binarysearch.
+     * @param searching The value to be searched for.
+     * @param attribute The attribute the value belongs to.
+     * @return A list of indexes.
+     */
+    private List<Integer> findAdjacentSearch(int index, String searching, String attribute){
+        List<Integer> indexes = new LinkedList<>();
+        int current=0;
+        indexes.add(index);
+        String[] aux = searching.split(";");
+        switch (attribute){
+            case "identifier":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getIdentifier().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getIdentifier().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "name":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getName().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getName().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "surname":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getSurname().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getSurname().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "birthdate":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getBirthdate().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getBirthdate().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "gender":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getGender().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getGender().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "birthplace":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getBirthplace().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getBirthplace().equalsIgnoreCase(searching))
+                {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "home":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getHome().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getHome().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+            case "groupcode":
+                // Iterate upwards until we hit the end or a different value
+                current = index + 1;
+                while (current < personList.size() && personList.get(current).getGroupcode().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current++;
+                }
+                // Iterate downwards until we hit the start or a different value
+                current = index - 1;
+                while (current >= 0 && personList.get(current).getGroupcode().equalsIgnoreCase(searching)) {
+                    indexes.add(current);
+                    current--;
+                }
+                break;
+        }
+        return indexes;
+    }
+    /**
+     * Method that searches the list containg all users for a certain Person that has the desired attribute(s). Only one attribute at a time, but in case of a array
+     * type Attribute, the user must write a single string, containing all desired strings speparated by ";".
+     * Prints the found person(s).
+     * @param searching the value(s) to be found in a person.
+     * @param attribute the attribute the value(s) belong to.
+     * @return a linked list with all indexes that match the search.
+     */
+    private List<Integer> searchPersonList(String searching, String attribute){
+        System.out.println("Searching...");
+        sortPersonList(attribute);
+        Person p = new Person();
+        List<Integer> results = new LinkedList<>();
+        int auxilary;
+        switch (attribute){
+            case "identifier":
+                p.setIdentifier(searching);
+                int index = Collections.binarySearch(personList, p, Person.CprIdentifier);
+                if (index>=0) {
+                    results.add(index);
+                }
+                break;
+            case "name":
+                p.setName(searching);
+                int index1 = Collections.binarySearch(personList, p, Person.CprName);
+                if (index1>=0){
+                    results = findAdjacentSearch(index1,searching,attribute);
+                }
+                break;
+            case "surname":
+                p.setSurname(searching);
+                int index2 = Collections.binarySearch(personList, p, Person.CprSurname);
+                if (index2>=0) {
+                    results = findAdjacentSearch(index2, searching, attribute);
+                }
+                break;
+            case "birthdate":
+                p.setBirthdate(searching);
+                int index3 = Collections.binarySearch(personList, p, Person.CprBirthdate);
+                if (index3>=0) {
+                    results = findAdjacentSearch(index3, searching, attribute);
+                }
+                break;
+            case "gender":
+                p.setGender(searching);
+                int index4 = Collections.binarySearch(personList, p, Person.CprGender);
+                if (index4>=0) {
+                    results = findAdjacentSearch(index4, searching, attribute);
+                }
+                break;
+            case "birthplace":
+                p.setBirthplace(searching);
+                int index5 = Collections.binarySearch(personList, p, Person.CprBirthplace);
+                if (index5>=0) {
+                    results = findAdjacentSearch(index5, searching, attribute);
+                }
+                break;
+            case "home":
+                p.setHome(searching);
+                int index6 = Collections.binarySearch(personList, p, Person.CprHome);
+                if (index6>=0) {
+                    results = findAdjacentSearch(index6, searching, attribute);
+                }
+                break;
+            case "studydata":
+                //In case more studydata want to be compared, separate them only with ;.
+                String[] aux = searching.split(";");
+                for (Person k : personList){
+                    if (k.equalsStudydata(aux)){
+                        auxilary = getIndex(k);
+                        if (auxilary != -1){
+                            results.add(auxilary);
+                        }
+                    }
+                }
+                break;
+            case "workdata":
+                //In case more workdata want to be compared, separate them only with ;.
+                String[] aux1 = searching.split(";");
+                for (Person k : personList){
+                    if (k.equalsWorkdata(aux1)){
+                        auxilary = getIndex(k);
+                        if (auxilary != -1){
+                            results.add(auxilary);
+                        }
+                    }
+                }
+                break;
+            case "movies":
+                //In case more movies want to be compared, separate them only with ;.
+                String[] aux2 = searching.split(";");
+                for (Person k : personList){
+                    if (k.equalsMovies(aux2)){
+                        auxilary = getIndex(k);
+                        if (auxilary != -1){
+                            results.add(auxilary);
+                        }
+                    }
+                }
+                break;
+            case "groupcode":
+                p.setGroupcode(searching);
+                int index7 = Collections.binarySearch(personList, p, Person.CprGroupcode);
+                if (index7>=0) {
+                    results = findAdjacentSearch(index7, searching, attribute);
+                }
+                break;
+            default :
+                break;
+        }
+        return results;
+    }
+    /**
+     * Simply prints all results of a search. THIS is the method used for searching for the client.
+     * @param searching What to be searched for.
+     * @param attribute Where to search for it.
+     */
+    private void printSearchedPersonList(String searching, String attribute){
+        List<Integer> results = searchPersonList(searching, attribute);
+        if (results.size()>0){
+            System.out.println("Found:");
+            for (Integer i : results){
+                System.out.println(personList.get(i).toString());
+            }
+        }
+        else {
+            System.out.println("Nothing was found with your parameter in this attribute.");
+        }
+
+    }
+    /**
+     * Returns the index of a person in the list.
+     * @param p person
+     * @return index
+     */
+    private int getIndex (Person p){
+
+        for (int i=0;i< personList.size();i++){
+
+            if (p.equals(personList.get(i))){
+
+                return i;
+            }
 
 
+        }
 
+        return -1;
+    }
+    /**
+     * Method for using in other methods. Compares a person by its favourite movies. All movies have to be the same / it has to be the same collection.
+     * @param ob2 Movies of the comparing Person.
+     * @param ob1 Movies of the other comparing Person.
+     * @return Boolean true or false.
+     */
+    public boolean equalsMovieCollection(String[] ob1, String[] ob2){
+        boolean result = false;
+        int counter=0;
+        for (int i=0; i<ob2.length; i++){
+            for (int e=0; e<ob1.length; e++) {
+                if ( ob2[i].equalsIgnoreCase(ob1[e]) ){
+                    counter++;
+                }
+            }
+        }
+        if (counter == ob2.length && ob2.length==ob1.length){
+            result=true;
+        }
+        return result;
+    }
+    /**
+     * Method checks if a list of movie collections contains a certain collection
+     * @param c collections
+     * @param m certain collection
+     * @return if yes or no
+     */
+    private boolean containsMovieCollection(List<String[]> c, String[] m){
+        boolean result=false;
+        for (String[] k : c){
+
+            if (equalsMovieCollection(k,m)){
+
+                result=true;
+                return result; //Saves time
+            }
+
+        }
+        return result;
+
+    }
+    /**
+     * Method that gets all different movie collections from the network
+     * @return a list of all different movie collections
+     */
+    private List<String[]> getMovieCollections(){
+        List<String[]> collections = new LinkedList<>();
+        for (Person p : personList){
+            //if not already in list
+            if (!containsMovieCollection(collections,p.getMoviesdata()))
+                collections.add(p.getMoviesdata());
+        }
+        return collections;
+    }
 
     // 3rd milestone
 
