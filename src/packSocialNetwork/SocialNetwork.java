@@ -103,8 +103,8 @@ public class SocialNetwork {
                         "    4. People born in the city of residential ID set \n" +
                         "    5. People that share favourite movies \n" +
                         "    6. Collection of favourite movies and persons \n" +
-                        "    7. Chain \n" +
-                        "    8. Cliques ");
+                        "    7. Chain (not available yet) \n" +
+                        "    8. Cliques (not available yet)");
     }
     /**
      * Prints the choices of the search menu.
@@ -255,8 +255,8 @@ public class SocialNetwork {
         printFind();
         int to = 0;
         do {
-            System.out.println("Select one of the previous options (1-6)");
-            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7: ");
+            System.out.println("Select one of the previous options (1-8)");
+            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7, 8: ");
             try {
                 to = sc.nextInt();
             } catch (InputMismatchException e) {
@@ -379,11 +379,11 @@ public class SocialNetwork {
                     tos6 = sc.next();
                 } while (!(tos6.equals("C") || tos6.equals("F")));
                 if (tos6.equals("C"))
-                    System.out.println(splitPersonByMoviesString());
+                    printPersonByMoviesToConsole();
                 else {
                     System.out.println("The file will be on 'files/' directory.");
                     System.out.print("Enter the name of the file: ");
-                    printPersonListMoviesToFile(splitPersonByMoviesString(), sc.next());
+                    printPersonByMoviesToFile(sc.next());
                 }
                 break;
             case 7:
@@ -571,7 +571,7 @@ public class SocialNetwork {
      * @throws PersonNotFoundException if the Person does not exist in the SocialNetwork
      */
     private Person binarySearchPersonID(String id) throws PersonNotFoundException {
-        return binarySearchPersonIDBack(id, 0, personList.size());
+        return binarySearchPersonIDBack(id, 0, personList.size()-1);
     }
     /**
      * Makes a binary search in the ArrayList ordered by the ID
@@ -980,6 +980,30 @@ public class SocialNetwork {
             s += "\n";
         }
         return s;
+    }
+    /**
+     * Prints all the collections of favourite and the user(s) basic info that share each collection to console.
+     */
+    private void printPersonByMoviesToConsole() {
+        System.out.println(splitPersonByMoviesString());
+    }
+    /**
+     * Prints all the collections of favourite and the user(s) basic info that share each collection in the specified file.
+     * @param filename File where we want to save the information.
+     */
+    private void printPersonByMoviesToFile(String filename) {
+        File f;
+        FileWriter fw;
+        String s =  "";
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s += splitPersonByMoviesString();
+            fw.write(s);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
     }
     /**
      * Method that sorts the list containing all users by a chosen parameter.

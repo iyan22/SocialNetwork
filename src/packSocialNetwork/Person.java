@@ -424,10 +424,8 @@ public class Person implements Comparable<Person> {
     public static Comparator<Person> CprIdentifier = new Comparator<Person>() {
         @Override
         public int compare(Person o1, Person o2) {
-            String id1 = o1.getIdentifier().toUpperCase();
-            String id2 = o2.getIdentifier().toUpperCase();
-
-            //ascending order
+            String id1 = o1.getIdentifier();
+            String id2 = o2.getIdentifier();
             return id1.compareTo(id2);
         }
     };

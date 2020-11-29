@@ -1,0 +1,9 @@
+Gonz01 lives in Lasarte, and this/these user(s) was/were born there:
+Error: The person does not exist or no one that was born in that hometown.
+
+Error: The person does not exist or no one that was born in that hometown.
+
+Mik01 lives in Galdakao, and this/these user(s) was/were born there:
+Luis Miguel Galdakao Elesalde;Informatika
+Mikel Dalmau Galdakao Elesalde;Informatika
+
