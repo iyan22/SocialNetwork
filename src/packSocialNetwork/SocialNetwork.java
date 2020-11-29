@@ -3,10 +3,8 @@ package packSocialNetwork;
 import packSocialNetworkExceptions.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * SocialNetwork contains people information and the relations between them if exist.
@@ -345,7 +343,8 @@ public class SocialNetwork {
                     System.out.print("\nEnter C or F: ");
                     tos5 = sc.next();
                 } while (!(tos5.equals("C") || tos5.equals("F")));
-                System.out.print("Write the favourite movie: \n");
+                System.out.print("You must follow the next format: movie1;movie2;movie3 \n");
+                System.out.print("Write the favourite movies collection: \n");
                 sc.nextLine();
                 String sn5 = sc.nextLine();
                 if (tos5.equals("C")) printPersonListMoviesToConsole(sn5);
@@ -648,7 +647,6 @@ public class SocialNetwork {
     private String findPersonByCityStringBasic(String city) throws PersonNotFoundException {
         String s = "The user(s) born in " + city + " is/are:\n";
         ArrayList<Person> arr = findPersonByCity(city);
-        String id;
         for (Person p: arr) {
             s += p.getBasicInfo() + "\n";
         }
@@ -706,7 +704,7 @@ public class SocialNetwork {
         if (arr.isEmpty()) {
             throw new PersonNotFoundException();
         }
-        // TODO Sort the array HOW??
+        Collections.sort(arr, Person.comparatorDatesList());
         return arr;
     }
     /**
@@ -723,7 +721,7 @@ public class SocialNetwork {
         ArrayList<Person> arr = findPersonBetweenDates(year1, year2);
         String id;
         for (Person p: arr) {
-            s += p.getBasicInfo() + "\n";
+            s += p.getDifferentInfo() + "\n";
         }
         return s;
     }
@@ -790,12 +788,13 @@ public class SocialNetwork {
             f = new File("files/residential.txt");
             fr = new Scanner(f);
             while (fr.hasNext()) {
-                Person p = binarySearchPersonID(fr.nextLine());
-                s += p.getIdentifier() + " was born in " + p.getBirthplace() + ", and this users too:\n";
+                Person p = null;
                 try {
-                    s += findPersonByCityStringMore(p.getBirthplace()) + "\n";
+                    p = binarySearchPersonID(fr.nextLine());
+                    s += p.getIdentifier() + " lives in " + p.getHome() + ", and this/these user(s) was/were born there:\n";
+                    s += findPersonByCityStringMore(p.getHome()) + "\n";
                 } catch (PersonNotFoundException e) {
-                    System.out.println("Error: Does not exist no one that has born in " + p.getBirthplace() + "\n");
+                    s += "Error: The person does not exist or no one that was born in that hometown.\n\n";
                 }
             }
         } catch (FileNotFoundException e) {
@@ -827,6 +826,8 @@ public class SocialNetwork {
             System.out.println("Error: File was not found");
         }
     }
+
+
     /**
      * Splits Person(s) by individual favourite movies in a HashMap, where the keys are the favourite movies, and the values
      * an ArrayList of Person that have that favourite movie in common.
@@ -837,48 +838,50 @@ public class SocialNetwork {
         HashMap<String, ArrayList<Person>> hm = new HashMap<String, ArrayList<Person>>();
         for (Person p: personList) {
             String fm = p.getMovies();
-            String[] fma  = fm.split(";");
-            for (String fmai : fma) {
-                ArrayList<Person> al;
-                if (hm.containsKey(fmai)) {
-                    al = hm.get(fmai);
-                } else {
-                    al = new ArrayList<Person>();
-                }
-                al.add(p);
-                hm.put(fmai, al);
+            String[] fma = fm.split(";");
+            Arrays.sort(fma);
+            ArrayList<Person> al;
+            if (hm.containsKey(Arrays.toString(fma))) {
+                al = hm.get(Arrays.toString(fma));
             }
+            else {
+                al = new ArrayList<Person>();
+            }
+            al.add(p);
+            hm.put(Arrays.toString(fma), al);
         }
         return hm;
     }
     /**
      * Obtains the list of Person(s) that share that favourite movie in common, if exist.
-     * @param movie The title of the favourite movie.
+     * @param movies The title of the favourite movie.
      * @return An ArrayList of Person(s) that have in common the given movie as favourite.
      * @throws PersonNotFoundException If no one in the SocialNetwork has the movie given as favourite.
      */
-    private ArrayList<Person> getPersonListMovies(String movie) throws PersonNotFoundException {
+    private ArrayList<Person> getPersonListMovies(String movies) throws PersonNotFoundException {
         HashMap<String, ArrayList<Person>> hm = splitPersonByMovies();
-        if (hm.containsKey(movie)) {
-            return hm.get(movie);
+        String[] moviesA = movies.split(";");
+        Arrays.sort(moviesA);
+        if (hm.containsKey(Arrays.toString(moviesA))) {
+            return hm.get(Arrays.toString(moviesA));
         }
         throw new PersonNotFoundException();
     }
     /**
      * Obtains a String of Person(s) that share that favourite movie in common, if exist.
-     * @param movie The title of the favourite movie.
+     * @param movies The title of the favourite movie.
      * @return A String of Person(s) basic info that have in common the given movie as favourite.
      */
-    private String getPersonListMoviesString(String movie) {
+    private String getPersonListMoviesString(String movies) {
         String s = "";
         try {
-            ArrayList<Person> al = getPersonListMovies(movie);
-            s = "The user(s) with favourite movie " + movie + " is/are:\n";
+            ArrayList<Person> al = getPersonListMovies(movies);
+            s = "The user(s) with favourite movie " + movies + " is/are:\n";
             for (Person p : al) {
                 s += p.getBasicInfo() + "\n";
             }
         } catch (PersonNotFoundException e) {
-            System.out.println("Error: Does not exist no one with the favourite movie " + movie + "\n");
+            System.out.println("Error: Does not exist no one with the favourite movie " + movies + "\n");
         }
         return s;
     }

@@ -1,5 +1,7 @@
 package packSocialNetwork;
 
+import java.util.Comparator;
+
 /**
  * Person has a lot of data/information and can have relations with other packSocialNetwork.Person's on the Social Network.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
@@ -97,6 +99,13 @@ public class Person implements Comparable<Person> {
         return birthplace;
     }
     /**
+     * Getter of the user's home.
+     * @return Home of the person.
+     */
+    public String getHome() {
+        return home;
+    }
+    /**
      * Getter of the user's favourite movies.
      * @return Favourite movies of the person.
      */
@@ -130,6 +139,13 @@ public class Person implements Comparable<Person> {
             }
         }
         return name + " " + surname + " " + birthplace + " " + studydataS;
+    }
+    /**
+     * Gets different information of the user: Birthplace Surname Name
+     * @return Values of Birthplace, Surname and Name separated by blanks.
+     */
+    public String getDifferentInfo() {
+        return this.birthplace + " " + this.surname + " " + this.name;
     }
     /**
      * Compares a Person with the given Object and returns true if the ID, name and surname are the same.
@@ -187,22 +203,7 @@ public class Person implements Comparable<Person> {
     @Override public int compareTo(Person o) {
         int res;
         if (this.identifier.compareTo(o.getIdentifier()) == 0) {
-            if (this.name.compareTo(o.getName()) == 0) {
-                if (this.surname.compareTo(o.getSurname()) == 0) {
-                    res = 0;
-                }
-                else if (this.surname.compareTo(o.getSurname()) < 0) {
-                    res = -1;
-                } else {
-                    res = 1;
-                }
-            }
-            else if (this.name.compareTo(o.getName()) < 0) {
-                res = -1;
-            }
-            else {
-                res = 1;
-            }
+            res = 0;
         }
         else if (this.identifier.compareTo(o.getIdentifier()) < 0) {
             res = -1;
@@ -211,5 +212,38 @@ public class Person implements Comparable<Person> {
             res = 1;
         }
         return res;
+    }
+
+    public static Comparator<Person> comparatorDatesList() {
+        return new Comparator<Person>() {
+            @Override public int compare(Person o1, Person o2) {
+                int res;
+                if (o1.getBirthplace().compareTo(o2.getBirthplace()) == 0) {
+                    if (o1.getSurname().compareTo(o2.getSurname()) == 0) {
+                        if (o1.getName().compareTo(o2.getName()) == 0) {
+                            res = 0;
+                        }
+                        else if (o1.getName().compareTo(o2.getName()) < 0) {
+                            res = -1;
+                        } else {
+                            res = 1;
+                        }
+                    }
+                    else if (o1.getSurname().compareTo(o2.getSurname()) < 0) {
+                        res = -1;
+                    }
+                    else {
+                        res = 1;
+                    }
+                }
+                else if (o1.getBirthplace().compareTo(o2.getBirthplace()) < 0) {
+                    res = -1;
+                }
+                else {
+                    res = 1;
+                }
+                return res;
+            }
+        };
     }
 }
