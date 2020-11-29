@@ -295,7 +295,7 @@ public class Person implements Comparable<Person> {
                 "," + moviesS + "," + groupcode;
     }
     /**
-     * Compares a Person with the given Person by the ID, and if needed by name and by surname.
+     * Compares a Person with the given Person by the ID.
      * @param o The other Person to be compared.
      * @return a negative integer, zero, or a positive integer as this person is lexicographically less than, equal to, or greater than the specified object.
      */

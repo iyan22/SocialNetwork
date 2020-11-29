@@ -107,7 +107,7 @@ public class SocialNetwork {
                         "    8. Cliques (not available yet)");
     }
     /**
-     * Prints the choices of the search menu.
+     * Prints the choices of Search.
      */
     private void printSearch(){
         System.out.println(
@@ -942,7 +942,7 @@ public class SocialNetwork {
         System.out.println(getPersonListMoviesString(movies));
     }
     /**
-     * Prints the user(s) that share the specified favourite movies basic infoin the specified file.
+     * Prints the user(s) that share the specified favourite movies basic info in the specified file.
      * @param movies Favourite movies of the users we want to find.
      * @param filename File where we want to save the information.
      */
@@ -1281,7 +1281,7 @@ public class SocialNetwork {
         return results;
     }
     /**
-     * Simply prints all results of a search. THIS is the method used for searching for the client.
+     * Simply prints all results of a search. This is the method used for searching for the user.
      * @param searching What to be searched for.
      * @param attribute Where to search for it.
      */
@@ -1318,7 +1318,8 @@ public class SocialNetwork {
         return -1;
     }
     /**
-     * Method for using in other methods. Compares a person by its favourite movies. All movies have to be the same / it has to be the same collection.
+     * Method for using in other methods. Compares a person by its favourite movies. All movies have
+     * to be the same / it has to be the same collection.
      * @param ob2 Movies of the comparing Person.
      * @param ob1 Movies of the other comparing Person.
      * @return Boolean true or false.

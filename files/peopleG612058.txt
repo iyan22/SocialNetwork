@@ -1,0 +1,7 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studied at,workplaces,films,groupcode
+Maria82,Ramon,Virgolini,2-3-1988,male,Sevilla,Bulgaria,Hardvard University,Buldaria;Camaroon,Midsommer;Interestelar,G612058
+Rose2,Rose,Muralla,21-4-1956,female,Otxandio,Zarautz,Haztegi Ikastola,Dubai;New York City;Washington,The Wolf of Wall Street,G612058
+Frost639,Mikel,Gonzalez,17-12-1996,male,Irun,Irun,Irungo La Salle,Barcelona,Memento,G612058
+Agustin4,Agustin,Jiménez,3-7-1990,male,Pasajes,Pasajes,Bideberri BHI,Donostia,Frozen;Tenet,G612058
+Eneko777,Eneko,Franco,7-1-1960,male,Barakaldo,Donosti,Axular Lizeoa,Donosti;Bilbo,Origen,G612058
+Kepa11,Kepa,Agirregomezkorta,1-1-2000,male,Madrid,Getaria,Gabriel Aresti BHI,Biarritz,Dunkirk,G612058

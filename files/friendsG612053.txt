@@ -1,0 +1,11 @@
+“friend1,friend2
+AlexelC4P0,Vegetta777
+AlexelC4P0,WillyR3X
+AlexelC4P0,Abby666
+AlexelC4P0,StaXX
+Vegetta777,Abby666
+Vegetta777,WillyR3X
+Vegetta777,StaXX
+WillyR3X,StaXX
+WillyR3X,Abby666
+Abby666,StaXX

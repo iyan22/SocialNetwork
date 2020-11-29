@@ -1,0 +1,11 @@
+friend1,friend2
+Peru57,Iker6199
+Peru57,Ainhoa34
+Peru57,Amaia21
+Peru57,Ane52
+Iker6199,Ainhoa34
+Iker6199,Pepe77
+Iker6199,Amaia21
+Ainhoa34,Amaia21
+Ainhoa34,Ane52
+Ane52,Silvia3

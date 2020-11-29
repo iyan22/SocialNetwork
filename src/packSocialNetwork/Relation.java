@@ -50,7 +50,7 @@ public class Relation implements Comparable<Relation> {
         return  person1 + "," + person2;
     }
     /**
-     * Compares a Relation with the given Reltaion by the person1, and if needed by person2.
+     * Compares a Relation with the given Relation by the person1, and if needed by person2.
      * @param o The other Person to be compared.
      * @return a negative integer, zero, or a positive integer as this person is lexicographically less than, equal to, or greater than the specified object.
      */

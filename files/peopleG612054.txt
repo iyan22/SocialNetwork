@@ -1,0 +1,9 @@
+Ander01,Ander,Ugasagasti,13-5-1995,male,Tolosa,Tolosa,Bilbo,Tolosa;Bilbo,Fast and Furious,G612054
+
+MireN5,Miren,Agirre,7-7-1998,female,Bergara,Bergara,Arrasate,Bergara,Pretty Woman;Home Alone;Midnight in Paris,G612054
+
+Beñat22,Beñat,Fernández,29-2-1992,male,Iruña,Iruna,Donostia,Donostia;Iruña,Lord of Rings;Star Wars;Hunger Games,G612054
+
+Naro00,Naroa,Altuna,2-8-2000,female,Durango,Durango,Bilbo,Bilbo,The Irishman;The Wolf of Wall Street,G612054
+
+Maia1en,Maialen,Irigoyen,2-1-1997,female,Gasteiz,Gasteiz,Gasteiz,Aramaio;Gasteiz,Pulp Fiction;Indiana Jones,G612054

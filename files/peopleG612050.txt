@@ -1,0 +1,5 @@
+idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
+Jon121,Jon,Moríñigo,05-01-2001,male,Vitoria,Vitoria,Vitoria;Donostia,Vitoria;Donostia,InterStellar;Turing,G612050
+Iker3,Iker,Pintado,30-01-2001,male,Vitoria,Vitoria,Vitoria;San Sebastian,Vitoria;Donostia,Titanic;Rompe Ralph;Cadena Perpetua,G612050
+Fer12,Iker,Fernandez,15-12-2001,male,San Sebastian,San Sebastian,San Sebastian,San Sebastian,Los Lunis;Cars, G612050
+Pancracio99,Pancracio,Tetuanez,01-01-2001,fluid,Saint Petersburg,San Sebastian,Moscow,Irun,Anastasia, G612050
