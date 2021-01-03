@@ -1,10 +1,12 @@
 package packSocialNetwork;
 
 import packSocialNetworkExceptions.*;
+import packSocialNetworkGraph.Vertex;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import packSocialNetworkGraph.*;
 
 /**
  * SocialNetwork contains people information and the relations between them if exist.
@@ -17,7 +19,7 @@ public class SocialNetwork {
 
     // Attributes
     private ArrayList<Person> personList;
-    private ArrayList<Relation> relationList;
+    private FriendshipGraph friendshipGraph;
     private static SocialNetwork instance;
     private final Scanner sc = new Scanner(System.in);
 
@@ -27,7 +29,7 @@ public class SocialNetwork {
      */
     private SocialNetwork() {
         this.personList = new ArrayList<>();
-        this.relationList = new ArrayList<>();
+        this.friendshipGraph = new FriendshipGraph();
     }
 
     // Methods
@@ -103,7 +105,7 @@ public class SocialNetwork {
                         "    4. People born in the city of residential ID set \n" +
                         "    5. People that share favourite movies \n" +
                         "    6. Collection of favourite movies and persons \n" +
-                        "    7. Chain (not available yet) \n" +
+                        "    7. Shortest chain of friends between two people \n" +
                         "    8. Cliques (not available yet)");
     }
     /**
@@ -123,6 +125,13 @@ public class SocialNetwork {
             option = askForSelectionInput();
             System.out.println("You have selected: ");
             switch (option) {
+                case 0:
+                    System.out.println("Secret! Adding 55 People and Relations to the Network...");
+                    addPeopleFromFile("people55.txt");
+                    addRelationsFromFile("friends55.txt");
+
+
+                    break;
                 case 1:
                     addPersonPeopleSelected();
                     break;
@@ -387,6 +396,18 @@ public class SocialNetwork {
                 }
                 break;
             case 7:
+                System.out.println("You have selected: ");
+                System.out.println( "7. Shortest chain of friends between two people \n");
+                String inp1, inp2;
+
+                System.out.println("Please, write the Id of the first person: ");
+                inp1 = sc.next();
+                System.out.println("");
+                System.out.println("Please, write the Id of the second person: ");
+                inp2 = sc.next();
+                System.out.println("");
+                printShortestChain(inp1,inp2);
+
                 break;
             case 8:
                 break;
@@ -507,9 +528,14 @@ public class SocialNetwork {
      */
     private void addRelation(String p1, String p2) throws RelationAlreadyAtSocialNetwork, PersonNotFoundException {
         if (existsInSocialNetwork(p1) && existsInSocialNetwork(p2)) {
-            Relation r = new Relation(p1, p2);
-            if (relationList.contains(r)) throw new RelationAlreadyAtSocialNetwork();
-            else relationList.add(r);
+
+            Person pp1 = binarySearchPersonID(p1);
+            Person pp2 = binarySearchPersonID(p2);
+            friendshipGraph.addPerson(pp1);
+            friendshipGraph.addPerson(pp2);
+            friendshipGraph.addFriendship(pp1,pp2); //throws alreadyatsocialnetwork exception
+            //TODO: Delete Relation class. It is obsolete now.
+
         }
         else throw new PersonNotFoundException();
     }
@@ -626,13 +652,9 @@ public class SocialNetwork {
         for (Person p: arr) {
             id = p.getIdentifier();
             s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
-            for (Relation r: relationList) {
-                if (r.getPerson1().equals(id)) {
-                    s += binarySearchPersonID(r.getPerson2()).getBasicInfo() + "\n";
-                }
-                else if (r.getPerson2().equals(id)) {
-                    s += binarySearchPersonID(r.getPerson1()).getBasicInfo() + "\n";
-                }
+            for (Vertex v : friendshipGraph.getAdjList(p)) {
+                //all friends of that person
+                s +=v.getP().getBasicInfo() + "\n";
             }
             s += "\n";
         }
@@ -1374,6 +1396,40 @@ public class SocialNetwork {
     }
 
     // 3rd milestone
+
+    /**
+     * Finds the shortest chain between two people, if they exist in the social network. Prints the result to console.
+     * @param Id1 Identifier of person 1
+     * @param Id2 Identifier of person 2
+     */
+    private void printShortestChain (String Id1, String Id2){
+        if (existsInSocialNetwork(Id1) && existsInSocialNetwork(Id2)) {
+            Person p1 = binarySearchPersonID(Id1);
+            Person p2 = binarySearchPersonID(Id2);
+
+            //Add to graph. Does nothing if they are already in the graph, adds them if not and obviously that means that there is no friendship yet.
+            friendshipGraph.addPerson(p1);
+            friendshipGraph.addPerson(p2);
+
+            List<Vertex> path = friendshipGraph.shortestPathBFS(p1, p2);
+            if (!path.isEmpty()) {
+                System.out.println("Shortest path from " + Id1 + " to " + Id2 + ":");
+                String s = "";
+                for (Vertex v : path) {
+                    s += " -> ";
+                    s += v.getP().getIdentifier();
+
+                }
+                s += ".";
+                System.out.println(s);
+            }
+        }
+        else{
+            System.out.println("No users with given Ids exists in the Network!");
+        }
+
+    }
+
 
 
 }
