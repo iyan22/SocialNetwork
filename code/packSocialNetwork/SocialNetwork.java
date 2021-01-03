@@ -107,8 +107,9 @@ public class SocialNetwork {
                         "    4. People born in the city of residential ID set \n" +
                         "    5. People that share favourite movies \n" +
                         "    6. Collection of favourite movies and persons \n" +
-                        "    7. Chain (not available yet) \n" +
-                        "    8. Cliques (not available yet)");
+                        "    7. Shortest chain of relations \n" +
+                        "    8. Longest chain of relations \n" +
+                        "    9. Cliques (not available yet)");
     }
     /**
      * Prints the choices of Search.
@@ -260,13 +261,13 @@ public class SocialNetwork {
         int to = 0;
         do {
             System.out.println("Select one of the previous options (1-8)");
-            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7, 8: ");
+            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7, 8, 9: ");
             try {
                 to = sc.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Error: Introduce a number from 1 to 6 (both included)");
             }
-        } while (to < 1 || 8 < to);
+        } while (to < 1 || 9 < to);
         switch (to) {
             case 1:
                 System.out.println("You have selected: ");
@@ -391,8 +392,31 @@ public class SocialNetwork {
                 }
                 break;
             case 7:
+                System.out.println("You have selected: ");
+                System.out.println( "7. Shortest chain of relations \n" +
+                        "    C. Console \n" +
+                        "    F. File");
+                String tos7;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos7 = sc.next();
+                } while (!(tos7.equals("C") || tos7.equals("F")));
+                System.out.print("Write initial person: ");
+                String sn71 = sc.next();
+                System.out.print("Write finish person: ");
+                String sn72 = sc.next();
+                if (tos7.equals("C"))
+                    printShortestChainToConsole(sn71, sn72);
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printShortestChainToFile(sn71, sn72, sc.next());
+                }
                 break;
             case 8:
+                break;
+            case 9:
                 break;
             default:
                 break;
@@ -984,14 +1008,14 @@ public class SocialNetwork {
     public boolean equalsMovieCollection(String[] ob1, String[] ob2){
         boolean result = false;
         int counter=0;
-        for (int i=0; i<ob2.length; i++){
-            for (int e=0; e<ob1.length; e++) {
-                if ( ob2[i].equalsIgnoreCase(ob1[e]) ){
+        for (String s : ob2) {
+            for (String v : ob1) {
+                if (s.equalsIgnoreCase(v)) {
                     counter++;
                 }
             }
         }
-        if (counter == ob2.length && ob2.length==ob1.length){
+        if (counter == ob2.length && ob2.length == ob1.length){
             result=true;
         }
         return result;
@@ -1032,6 +1056,104 @@ public class SocialNetwork {
     }
 
     // 3rd milestone
+    /**
+     * Obtains the shortest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return LinkedList of Persons with the shortest chain of relations.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private LinkedList<Person> shortestChain(String person1, String person2) throws RelationDoesNotExistException {
+        int[] previous = bfs(person1, person2);
+        int actual = personHashMap.get(new Person(person2));
+        int indexp1 = personHashMap.get(new Person(person1));
+        LinkedList<Person> res = new LinkedList<Person>();
+        res.addFirst(integerHashMap.get(actual));
+        while (actual != indexp1) {
+            actual = previous[actual];
+            res.addFirst(integerHashMap.get(actual));
+        }
+        return res;
+    }
+    /**
+     * Makes a Breadth-First Search in the graph to find the shortest chain of relations between person1 and person2 users in
+     * the SocialNetwork.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return Array that reference to the previous person in the relation chain.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private int[] bfs(String person1, String person2) throws RelationDoesNotExistException {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean[] visited = new boolean[numUsers];
+        int[] previous = new int[numUsers];
+        int indexp1 = personHashMap.get(new Person(person1));
+        int indexp2 = personHashMap.get(new Person(person2));
+        queue.offer(indexp1);
+        while (!queue.isEmpty()) {
+            indexp1 = queue.poll();
+            visited[indexp1] = true;
+            for (int i = 0; i < adjacencyList.get(indexp1).size(); i++) {
+                int actual = adjacencyList.get(indexp1).get(i);
+                if (actual == indexp2) {
+                    visited[actual] = true;
+                    previous[actual] = indexp1;
+                    return previous;
+                }
+                if (!visited[actual]) {
+                    visited[actual] = true;
+                    previous[actual] = indexp1;
+                    queue.offer(actual);
+                }
+            }
+        }
+        throw new RelationDoesNotExistException();
+    }
+    /**
+     * Gives a String representation of the shortest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return String representation of the shortest chain of relations.
+     */
+    private String shortestChainString(String person1, String person2) {
+        StringBuilder s = new StringBuilder();
+        s.append("This is the shortest chain of relations between ").append(person1).append(" and ").append(person2).append(":\n");
+        try {
+            LinkedList<Person> res = shortestChain(person1, person2);
+            while (!res.isEmpty()) {
+                s.append(" - ").append(res.getFirst().getBasicInfo()).append("\n");
+                res.removeFirst();
+            }
+        }
+        catch (RelationDoesNotExistException e) {
+            s.append("Error: Relation does not exist");
+        }
+        return s.toString();
+    }
+    /**
+     * Prints all the shortest chain of relations and the user(s) basic info to console.
+     */
+    private void printShortestChainToConsole(String person1, String person2) {
+        System.out.println(shortestChainString(person1, person2));
+    }
+    /**
+     * Prints all the shortest chain of relations and the user(s) basic info in the specified file.
+     * @param filename File where we want to save the information.
+     */
+    private void printShortestChainToFile(String person1, String person2, String filename) {
+        File f;
+        FileWriter fw;
+        StringBuilder s =  new StringBuilder();
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s.append(shortestChainString(person1, person2));
+            fw.write(s.toString());
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
+    }
 
 
 }
