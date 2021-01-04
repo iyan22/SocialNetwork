@@ -6,7 +6,7 @@ package packSocialNetwork;
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez and Davy Wellinger
- * @version secondMilestone
+ * @version thirdMilestone
  */
 public class SocialNetworkSimulation {
 

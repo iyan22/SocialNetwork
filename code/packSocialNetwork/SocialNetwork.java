@@ -11,14 +11,16 @@ import java.util.*;
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez and Davy Wellinger
- * @version secondMilestone
+ * @version thirdMilestone
  */
 public class SocialNetwork {
 
     // Attributes
-    private ArrayList<Person> personList;
-    private ArrayList<Relation> relationList;
+    private HashMap<Person, Integer> personHashMap;
+    private HashMap<Integer, Person> integerHashMap;
+    private ArrayList<ArrayList<Integer>> adjacencyList;
     private static SocialNetwork instance;
+    private static int numUsers;
     private final Scanner sc = new Scanner(System.in);
 
     // Constructors
@@ -26,8 +28,10 @@ public class SocialNetwork {
      * Creates an instance of Social Network.
      */
     private SocialNetwork() {
-        this.personList = new ArrayList<>();
-        this.relationList = new ArrayList<>();
+        this.personHashMap = new HashMap<Person, Integer>();
+        this.integerHashMap = new HashMap<Integer, Person>();
+        this.adjacencyList = new ArrayList<ArrayList<Integer>>();
+        numUsers = 0;
     }
 
     // Methods
@@ -38,10 +42,10 @@ public class SocialNetwork {
      * @return The instance of the Social Network.
      */
     public static SocialNetwork getInstance() {
-        if (instance == null) {
-            instance = new SocialNetwork();
+        if (instance == null) {                             // If instance does not exist
+            instance = new SocialNetwork();                     // Create new instance
         }
-        return instance;
+        return instance;                                    // Return  instance
     }
 
     // 1st milestone
@@ -49,20 +53,20 @@ public class SocialNetwork {
      * Presents an initial menu with the different choices for interacting with the social network.
      */
     public void initialMenu() {
-        printInitialMenu();
-        selectionInitialMenu();
+        printInitialMenu();                                 // Prints initial menu
+        selectionInitialMenu();                             // Asks user to input and performs tasks
     }
     /**
      * Prints the choices of the initial menu.
      */
     private void printInitialMenu() {
-        System.out.println("\nSocial Network menu:");
-        printAddPersonPeople();
-        printAddRelations();
-        printPrintOut();
-        printFind();
-        printSearch();
-        System.out.println("6. Log out \n \n");
+        System.out.println("\nSocial Network menu:");       // Prints first statement (menu)
+        printAddPersonPeople();                             // Prints people    (1)
+        printAddRelations();                                // Prints relations (2)
+        printPrintOut();                                    // Prints print     (3)
+        printFind();                                        // Prints find      (4)
+        printSearch();                                      // Prints search    (5)
+        System.out.println("6. Log out \n \n");             // Prints log out   (6)
     }
     /**
      * Prints the choices of the add person people menu.
@@ -103,8 +107,9 @@ public class SocialNetwork {
                         "    4. People born in the city of residential ID set \n" +
                         "    5. People that share favourite movies \n" +
                         "    6. Collection of favourite movies and persons \n" +
-                        "    7. Chain (not available yet) \n" +
-                        "    8. Cliques (not available yet)");
+                        "    7. Shortest chain of relations \n" +
+                        "    8. Longest chain of relations \n" +
+                        "    9. Cliques (not available yet)");
     }
     /**
      * Prints the choices of Search.
@@ -118,55 +123,61 @@ public class SocialNetwork {
      * exist, will call the program recursively.
      */
     private void selectionInitialMenu() {
-        int option;
-        do {
-            option = askForSelectionInput();
-            System.out.println("You have selected: ");
-            switch (option) {
-                case 1:
-                    addPersonPeopleSelected();
-                    break;
-                case 2:
-                    addRelationsSelected();
-                    break;
-                case 3:
-                    printOutSelected();
-                    break;
-                case 4:
-                    sortPersonList("identifier");
-                    printFindSelected();
-                    break;
-                case 5:
-                    searchPersonPeopleSelected();
-                    break;
-                case 6:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    break;
-            }
-            if (option != 6) printInitialMenu();
-        } while (option != 6);
-        sc.close();
+        int option;                                         // Define variable for user input
+        do {                                                // Perform while not logging out
+            option = askForSelectionInput();                    // User input verification
+            System.out.println("You have selected: ");          // Print selection
+            switch (option) {                                   // Switch with user input
+                case 0:                                             // 0 selected
+                    System.out.println("Testers option discovered! A lot of profiles have been added to Social Network");
+                    addPeopleFromFile("people55.txt");
+                    addPeopleFromFile("peopleG612047.txt");
+                    addRelationsFromFile("friends55.txt");
+                    addRelationsFromFile("friendsG612047.txt");
+                    break;                                          // break
+                case 1:                                             // 1 selected
+                    addPersonPeopleSelected();                          // Print people     (1)
+                    break;                                              // break
+                case 2:                                             // 2 selected
+                    addRelationsSelected();                             // Print relations  (2)
+                    break;                                          // break
+                case 3:                                             // 3 selected
+                    printOutSelected();                                 // Print print      (3)
+                    break;                                              // break
+                case 4:                                             // 4 selected
+                    printFindSelected();                                // Print find       (4)
+                    break;                                              // break
+                case 5:                                             // 5 selected
+                    searchPersonPeopleSelected();                       // Print search     (5)
+                    break;                                              // break
+                case 6:                                             // 6 selected
+                    System.out.println("Logging out...");               // Print log out    (6)
+                    break;                                              // break
+                default:                                            // default
+                    break;                                              // break
+            }                                                   // Close switch
+            if (option != 6) printInitialMenu();                // If not selected one option print menu again
+        } while (option != 6);                              // Close do while
+        sc.close();                                         // Close scanner
     }
     /**
      * Request user for an input, it has to be a number and treats InputMismatchException.
      * @return Returns user input int.
      */
     private int askForSelectionInput() {
-        boolean correct = false;
-        int option = 0;
-        while (!correct) {
-            try {
-                System.out.print("Select one option: ");
-                option = sc.nextInt();
-                correct = true;
-            } catch (InputMismatchException e) {
-                System.out.println("Error: You should introduce a number");
-                sc.nextLine();
-            }
-        }
-        return option;
+        boolean correct = false;                            // Define verification variable
+        int option = 0;                                     // Define user input variable
+        while (!correct) {                                  // While user input not verified
+            try {                                               // Try for possible exception
+                System.out.print("Select one option: ");            // Print option selection
+                option = sc.nextInt();                              // Scan option
+                correct = true;                                     // If exception not thrown is a number, so correct
+            } catch (InputMismatchException e) {                // Treat InputMismatchException (will ask again for input)
+                System.out.println("Error: You should introduce a number");     // Input was not an integer, prints error
+                sc.nextLine();                                                  // Clean scanner
+            }                                                   // Close try catch
+        }                                                   // Close while
+        return option;                                      // Returns verified user input
     }
     /**
      * Prints Add person option and performs task.
@@ -174,25 +185,26 @@ public class SocialNetwork {
     private void addPersonPeopleSelected() {
         printAddPersonPeople();
         String to;
-        do {
-            System.out.println("Manually (M) or File (F)");
-            System.out.print("\nEnter M or F: ");
-            to = sc.next();
-        } while (!(to.equals("M") || to.equals("F")));
-        if (to.equals("M")) {
-            System.out.println("Follow the next format:");
-            System.out.println("idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode");
-            try {
-                addPerson(sc.next());
-            } catch (PersonAlreadyAtSocialNetwork e) {
-                System.out.println("That person is already at the network");
-            }
+        do {                                                    // Perform until having M or F
+            System.out.println("Manually (M) or File (F)");         // Print options
+            System.out.print("\nEnter M or F: ");                   // Print select
+            to = sc.next();                                         // Scan user input
+        } while (!(to.equals("M") || to.equals("F")));          // Close do while
+        if (to.equals("M")) {                                   // If person is added manually
+            System.out.println("Follow the next format:");          // Print format
+            System.out.println("idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode");   // Format specified
+            try {                                                   // Try for possible exception
+                addPerson(sc.next());                                   // Add person with input data
+                System.out.print("Completed.\n\n");                     // Print task completed
+            } catch (PersonAlreadyAtSocialNetwork e) {              // Treat PersonAlreadyAtSocialNetwork
+                System.out.println("That person is already at the network");    // Print message
+            }                                                       // Close try catch
         }
-        else {
-            System.out.println("The file must be on 'files/' directory.");
-            System.out.print("Enter the name of the file: ");
-            addPeopleFromFile(sc.next());
-            System.out.print("Completed.\n\n");
+        else {                                                  // If person is added by file
+            System.out.println("The file must be on 'files/' directory.");  // Print precondition of file location
+            System.out.print("Enter the name of the file: ");   // Ask for file name
+            addPeopleFromFile(sc.next());                       // Add people with file data
+            System.out.print("Completed.\n\n");                 // Print task completed
         }
     }
     /**
@@ -256,13 +268,13 @@ public class SocialNetwork {
         int to = 0;
         do {
             System.out.println("Select one of the previous options (1-8)");
-            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7, 8: ");
+            System.out.print("\nEnter 1, 2, 3, 4, 5, 6, 7, 8, 9: ");
             try {
                 to = sc.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Error: Introduce a number from 1 to 6 (both included)");
             }
-        } while (to < 1 || 8 < to);
+        } while (to < 1 || 9 < to);
         switch (to) {
             case 1:
                 System.out.println("You have selected: ");
@@ -387,8 +399,31 @@ public class SocialNetwork {
                 }
                 break;
             case 7:
+                System.out.println("You have selected: ");
+                System.out.println( "7. Shortest chain of relations \n" +
+                        "    C. Console \n" +
+                        "    F. File");
+                String tos7;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos7 = sc.next();
+                } while (!(tos7.equals("C") || tos7.equals("F")));
+                System.out.print("Write initial person: ");
+                String sn71 = sc.next();
+                System.out.print("Write finish person: ");
+                String sn72 = sc.next();
+                if (tos7.equals("C"))
+                    printShortestChainToConsole(sn71, sn72);
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printShortestChainToFile(sn71, sn72, sc.next());
+                }
                 break;
             case 8:
+                break;
+            case 9:
                 break;
             default:
                 break;
@@ -408,9 +443,9 @@ public class SocialNetwork {
                 att.equals("gender") || att.equals("birthplace") || att.equals("home") || att.equals("groupcode") ||
                 att.equals("studydata") || att.equals("workdata") || att.equals("movies")));
 
-        System.out.println("Great, which " +att+ " do you want to search?");
+        System.out.println("Great, which " + att + " do you want to search?");
         va = sc.next();
-        printSearchedPersonList(va,att);
+        printSearchedPersonList(va, att, new ArrayList<>(integerHashMap.values()));
     }
     /**
      * Adds a person to the Social Network in lexicographical order.
@@ -429,15 +464,11 @@ public class SocialNetwork {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There was an error with your input\n");
         }
-        int i = 0;
-        boolean inserted = false;
-        while (i < personList.size() && !inserted) {
-            Person p = personList.get(i);
-            if (p.equals(np)) throw new PersonAlreadyAtSocialNetwork();
-            else if (p.compareTo(np) < 0) i++;
-            else inserted = true;
-        }
-        personList.add(i,np);
+        if (personHashMap.containsKey(np)) throw new PersonAlreadyAtSocialNetwork();
+        personHashMap.put(np, numUsers);
+        integerHashMap.put(numUsers, np);
+        adjacencyList.add(new ArrayList<Integer>());
+        numUsers++;
     }
     /**
      * Adds all the people from the file to the Social Network.
@@ -476,8 +507,9 @@ public class SocialNetwork {
      * Prints all the people at the Social Network to the console.
      */
     private void printPeopleToConsole() {
-        for (Person p: personList) {
-            System.out.println(p.toString());
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person person : tempArray) {
+            System.out.println(person.toString());
         }
     }
     /**
@@ -487,13 +519,14 @@ public class SocialNetwork {
      */
     private void printPeopleToFile(String filename) {
         File f = new File("files/" + filename);
-        FileWriter fw = null;
+        FileWriter fw;
         try {
             fw = new FileWriter(f);
             String sexample = "idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode\n";
             fw.write(sexample);
-            for (Person p: personList) {
-                fw.write(p.toString() + "\n");
+            Collection<Person> tempArray = integerHashMap.values();
+            for (Person person : tempArray) {
+                fw.write(person.toString() + "\n");
             }
             fw.close();
         } catch (IOException e) {
@@ -505,11 +538,16 @@ public class SocialNetwork {
      * @param p1 User ID of one person.
      * @param p2 User ID of the other person.
      */
-    private void addRelation(String p1, String p2) throws RelationAlreadyAtSocialNetwork, PersonNotFoundException {
-        if (existsInSocialNetwork(p1) && existsInSocialNetwork(p2)) {
-            Relation r = new Relation(p1, p2);
-            if (relationList.contains(r)) throw new RelationAlreadyAtSocialNetwork();
-            else relationList.add(r);
+    private void addRelation(String p1, String p2) throws RelationAlreadyAtSocialNetwork, PersonNotFoundException, IllegalArgumentException {
+        if (p1.equals(p2)) throw new IllegalArgumentException();
+        Person temp1 = new Person(p1);
+        Person temp2 = new Person(p2);
+        if (personHashMap.containsKey(temp1) && personHashMap.containsKey(temp2)) {
+            int ind1 = personHashMap.get(temp1);
+            int ind2 = personHashMap.get(temp2);
+            if (adjacencyList.get(ind1).contains(ind2) || adjacencyList.get(ind2).contains(ind1)) throw new RelationAlreadyAtSocialNetwork();
+            adjacencyList.get(ind1).add(ind2);
+            adjacencyList.get(ind2).add(ind1);
         }
         else throw new PersonNotFoundException();
     }
@@ -551,47 +589,6 @@ public class SocialNetwork {
         if (al > 0) System.out.println("Error: " + al + " realtionship(s) already at the network");
         if (nf > 0) System.out.println("Error: " + nf + " realtionship(s) couldn't be added; at least one ID was not found on SocialNetwork");
     }
-    /**
-     * Checks if one person exists in the social network given the ID (identifier).
-     * @param ID ID of the person you wan to check if exits in the social network.
-     * @return true  iif specified ID is associated to a person of the social network; otherwise false.
-     */
-    private boolean existsInSocialNetwork(String ID) {
-        try {
-            if (binarySearchPersonID(ID) != null) return true;
-        }
-        catch (PersonNotFoundException ignored) {}
-        return false;
-    }
-    /**
-     * Makes a binary search in the ArrayList ordered by the ID
-     * Frontend method
-     * @param id ID of the Person to search in the SocialNetwork
-     * @return The person instance if found
-     * @throws PersonNotFoundException if the Person does not exist in the SocialNetwork
-     */
-    private Person binarySearchPersonID(String id) throws PersonNotFoundException {
-        return binarySearchPersonIDBack(id, 0, personList.size()-1);
-    }
-    /**
-     * Makes a binary search in the ArrayList ordered by the ID
-     * Backend method
-     * @param id ID of the Person to search in the SocialNetwork
-     * @param left Left limit of the ArrayList
-     * @param right Right limit of the ArrayList
-     * @return The person instance if found
-     * @throws PersonNotFoundException if the Person does not exist in the SocialNetwork
-     */
-    private Person binarySearchPersonIDBack(String id, int left, int right) throws PersonNotFoundException {
-        if (right >= left) {
-            int mid = left + (right - left) / 2;
-            String actualid = personList.get(mid).getIdentifier();
-            if (actualid.equals(id)) return personList.get(mid);
-            if (actualid.compareTo(id) > 0) return binarySearchPersonIDBack(id , left, mid - 1);
-            return binarySearchPersonIDBack(id, mid + 1, right);
-        }
-        throw new PersonNotFoundException();
-    }
 
     // 2nd milestone
     /**
@@ -603,9 +600,10 @@ public class SocialNetwork {
      */
     private ArrayList<Person> findPersonBySurname(String surname) throws PersonNotFoundException {
         ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
-            if (p.getSurname().equals(surname)) {
-                arr.add(p);
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person person : tempArray) {
+            if (person.getSurname().equals(surname)) {
+                arr.add(person);
             }
         }
         if (arr.isEmpty()) {
@@ -620,23 +618,22 @@ public class SocialNetwork {
      * @throws PersonNotFoundException If no one in the SocialNetwork has that surname.
      */
     private String findFriendsBySurname(String surname) throws PersonNotFoundException {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         ArrayList<Person> arr = findPersonBySurname(surname);
         String id;
+        int tempind;
+        ArrayList<Integer> templist;
         for (Person p: arr) {
             id = p.getIdentifier();
-            s += "The user " + id + " surname is " + surname + "\nList of the friends: \n";
-            for (Relation r: relationList) {
-                if (r.getPerson1().equals(id)) {
-                    s += binarySearchPersonID(r.getPerson2()).getBasicInfo() + "\n";
-                }
-                else if (r.getPerson2().equals(id)) {
-                    s += binarySearchPersonID(r.getPerson1()).getBasicInfo() + "\n";
-                }
+            tempind = personHashMap.get(p);
+            templist = adjacencyList.get(tempind);
+            s.append("The user ").append(id).append(" surname is ").append(surname).append("\nList of the friends: \n");
+            for (Integer i: templist) {
+                s.append(integerHashMap.get(i).getBasicInfo()).append("\n");
             }
-            s += "\n";
+            s.append("\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Given a surname, prints the friends of the user(s) with that surname in the console.
@@ -679,7 +676,8 @@ public class SocialNetwork {
      */
     private ArrayList<Person> findPersonByCity(String city) throws PersonNotFoundException {
         ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person p: tempArray) {
             if (p.getBirthplace().equals(city)) {
                 arr.add(p);
             }
@@ -696,12 +694,12 @@ public class SocialNetwork {
      * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
      */
     private String findPersonByCityStringBasic(String city) throws PersonNotFoundException {
-        String s = "The user(s) born in " + city + " is/are:\n";
+        StringBuilder s = new StringBuilder("The user(s) born in " + city + " is/are:\n");
         ArrayList<Person> arr = findPersonByCity(city);
         for (Person p: arr) {
-            s += p.getBasicInfo() + "\n";
+            s.append(p.getBasicInfo()).append("\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Given a city, prints the user(s) basic info that has born in the given city in the console.
@@ -746,7 +744,8 @@ public class SocialNetwork {
      */
     private ArrayList<Person> findPersonBetweenDates(int year1, int year2) throws PersonNotFoundException {
         ArrayList<Person> arr = new ArrayList<>();
-        for (Person p: personList) {
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person p: tempArray) {
             int bdy = p.getBirthdateYear();
             if (year1 <= bdy && bdy <= year2) {
                 arr.add(p);
@@ -755,7 +754,7 @@ public class SocialNetwork {
         if (arr.isEmpty()) {
             throw new PersonNotFoundException();
         }
-        Collections.sort(arr, Person.comparatorDatesList());
+        arr.sort(Person.comparatorDatesList());
         return arr;
     }
     /**
@@ -768,13 +767,12 @@ public class SocialNetwork {
      * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
      */
     private String findPersonBetweenDatesString(int year1, int year2) throws PersonNotFoundException {
-        String s = "The user(s) born between " + year1 + " and " + year2 + " is/are:\n";
+        StringBuilder s = new StringBuilder("The user(s) born between " + year1 + " and " + year2 + " is/are:\n");
         ArrayList<Person> arr = findPersonBetweenDates(year1, year2);
-        String id;
         for (Person p: arr) {
-            s += p.getDifferentInfo() + "\n";
+            s.append(p.getDifferentInfo()).append("\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Given two dates, prints the user(s) basic info that has born between the given years.
@@ -797,12 +795,12 @@ public class SocialNetwork {
     private void printPersonBetweenDatesToFile(int year1, int year2, String filename) {
         File f;
         FileWriter fw;
-        String s =  "";
+        StringBuilder s = new StringBuilder();
         try {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
-            s += findPersonBetweenDatesString(year1, year2);
-            fw.write(s);
+            s.append(findPersonBetweenDatesString(year1, year2));
+            fw.write(s.toString());
             fw.close();
         } catch (IOException e) {
             System.out.println("Error: File was not found");
@@ -817,13 +815,12 @@ public class SocialNetwork {
      * @throws PersonNotFoundException If no one in the SocialNetwork has born in the given city.
      */
     private String findPersonByCityStringMore(String city) throws PersonNotFoundException {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         ArrayList<Person> arr = findPersonByCity(city);
-        String id;
         for (Person p: arr) {
-            s += p.getMoreInfo() + "\n";
+            s.append(p.getMoreInfo()).append("\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Finds the Person(s) in the SocialNetwork that have born in the same city as the ID's given in the file
@@ -832,26 +829,26 @@ public class SocialNetwork {
      * @return String with Persons more info that have born in the city of each ID given in residential.txt.
      */
     private String findPersonByCityResidentialString() {
-        File f = null;
-        Scanner fr = null;
-        String s = "";
+        File f;
+        Scanner fr;
+        StringBuilder s = new StringBuilder();
         try {
             f = new File("files/residential.txt");
             fr = new Scanner(f);
             while (fr.hasNext()) {
-                Person p = null;
+                Person p;
                 try {
-                    p = binarySearchPersonID(fr.nextLine());
-                    s += p.getIdentifier() + " lives in " + p.getHome() + ", and this/these user(s) was/were born there:\n";
-                    s += findPersonByCityStringMore(p.getHome()) + "\n";
-                } catch (PersonNotFoundException e) {
-                    s += "Error: The person does not exist or no one that was born in that hometown.\n\n";
+                    p = integerHashMap.get(personHashMap.get(new Person(fr.nextLine())));
+                    s.append(p.getIdentifier()).append(" lives in ").append(p.getHome()).append(", and this/these user(s) was/were born there:\n");
+                    s.append(findPersonByCityStringMore(p.getHome())).append("\n");
+                } catch (PersonNotFoundException | NullPointerException e) {
+                    s.append("Error: The person does not exist or no one that was born in that hometown.\n\n");
                 }
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error: File was not found");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Prints the user(s) more info of the ones that have born in the given ID's birthplace in the console.
@@ -866,12 +863,12 @@ public class SocialNetwork {
     private void printPersonByCityResidentialToFile(String filename) {
         File f;
         FileWriter fw;
-        String s =  "";
+        StringBuilder s =  new StringBuilder();
         try {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
-            s += findPersonByCityResidentialString();
-            fw.write(s);
+            s.append(findPersonByCityResidentialString());
+            fw.write(s.toString());
             fw.close();
         } catch (IOException e) {
             System.out.println("Error: File was not found");
@@ -885,7 +882,8 @@ public class SocialNetwork {
      */
     private HashMap<String, ArrayList<Person>> splitPersonByMovies() {
         HashMap<String, ArrayList<Person>> hm = new HashMap<String, ArrayList<Person>>();
-        for (Person p: personList) {
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person p: tempArray) {
             String fm = p.getMovies();
             String[] fma = fm.split(";");
             Arrays.sort(fma);
@@ -922,17 +920,17 @@ public class SocialNetwork {
      * @return A String of Person(s) basic info that have in common the given movie as favourite.
      */
     private String getPersonListMoviesString(String movies) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         try {
             ArrayList<Person> al = getPersonListMovies(movies);
-            s = "The user(s) with favourite movie " + movies + " is/are:\n";
+            s = new StringBuilder("The user(s) with favourite movie " + movies + " is/are:\n");
             for (Person p : al) {
-                s += p.getBasicInfo() + "\n";
+                s.append(p.getBasicInfo()).append("\n");
             }
         } catch (PersonNotFoundException e) {
             System.out.println("Error: Does not exist no one with the favourite movie " + movies + "\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Prints the user(s) that share the specified favourite movies basic info in the console.
@@ -967,19 +965,19 @@ public class SocialNetwork {
      * Person that have that favourite movie in common.
      */
     private String splitPersonByMoviesString() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         ArrayList<Person> al;
         HashMap<String, ArrayList<Person>> hm = splitPersonByMovies();
         String[] keys = hm.keySet().toArray(new String[0]);
         for (String sk: keys) {
-            s += sk + "\n";
+            s.append(sk).append("\n");
             al = hm.get(sk);
             for (Person p: al) {
-                s += p.getBasicInfo() + "\n";
+                s.append(p.getBasicInfo()).append("\n");
             }
-            s += "\n";
+            s.append("\n");
         }
-        return s;
+        return s.toString();
     }
     /**
      * Prints all the collections of favourite and the user(s) basic info that share each collection to console.
@@ -994,50 +992,103 @@ public class SocialNetwork {
     private void printPersonByMoviesToFile(String filename) {
         File f;
         FileWriter fw;
-        String s =  "";
+        StringBuilder s =  new StringBuilder();
         try {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
-            s += splitPersonByMoviesString();
-            fw.write(s);
+            s.append(splitPersonByMoviesString());
+            fw.write(s.toString());
             fw.close();
         } catch (IOException e) {
             System.out.println("Error: File was not found");
         }
     }
     /**
-     * Method that sorts the list containing all users by a chosen parameter.
-     * @param attribute one of the 11 attributes of a person.
+     * Method for using in other methods. Compares a person by its favourite movies. All movies have
+     * to be the same / it has to be the same collection.
+     * @param ob2 Movies of the comparing Person.
+     * @param ob1 Movies of the other comparing Person.
+     * @return Boolean true or false.
      */
-    private void sortPersonList(String attribute){
+    public boolean equalsMovieCollection(String[] ob1, String[] ob2){
+        boolean result = false;
+        int counter=0;
+        for (String s : ob2) {
+            for (String v : ob1) {
+                if (s.equalsIgnoreCase(v)) {
+                    counter++;
+                }
+            }
+        }
+        if (counter == ob2.length && ob2.length == ob1.length){
+            result=true;
+        }
+        return result;
+    }
+    /**
+     * Method checks if a list of movie collections contains a certain collection
+     * @param c collections
+     * @param m certain collection
+     * @return if yes or no
+     */
+    private boolean containsMovieCollection(List<String[]> c, String[] m){
+        for (String[] k : c){
+            if (equalsMovieCollection(k,m)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+    /**
+     * Method that gets all different movie collections from the network
+     * @return a list of all different movie collections
+     */
+    private List<String[]> getMovieCollections(){
+        List<String[]> collections = new LinkedList<>();
+        Collection<Person> tempArray = integerHashMap.values();
+        for (Person p : tempArray){
+            //if not already in list
+            if (!containsMovieCollection(collections,p.getMoviesdata()))
+                collections.add(p.getMoviesdata());
+        }
+        return collections;
+    }
+    /**
+     * Method that sorts the list containing all users by a chosen parameter.
+     * @param attribute One of the 11 attributes of Person.
+     * @return The list sorted by the specified attribute.
+     */
+    private ArrayList<Person> sortPersonList(String attribute, ArrayList<Person> personList){
         switch (attribute){
             case "identifier":
-                Collections.sort(personList, Person.CprIdentifier );
+                personList.sort(Person.CprIdentifier);
                 break;
             case "name":
-                Collections.sort(personList, Person.CprName );
+                personList.sort(Person.CprName);
                 break;
             case "surname":
-                Collections.sort(personList, Person.CprSurname);
+                personList.sort(Person.CprSurname);
                 break;
             case "birthdate":
-                Collections.sort(personList, Person.CprBirthdate );
+                personList.sort(Person.CprBirthdate);
                 break;
             case "gender":
-                Collections.sort(personList, Person.CprGender );
+                personList.sort(Person.CprGender);
                 break;
             case "birthplace":
-                Collections.sort(personList, Person.CprBirthplace);
+                personList.sort(Person.CprBirthplace);
                 break;
             case "home":
-                Collections.sort(personList, Person.CprHome );
+                personList.sort(Person.CprHome);
                 break;
             case "groupcode":
-                Collections.sort(personList, Person.CprGroupcode );
+                personList.sort(Person.CprGroupcode);
                 break;
             default :
                 break;
         }
+        return personList;
     }
     /**
      * Method that creates a list of all indexes in the peopleList that match the search.
@@ -1048,9 +1099,9 @@ public class SocialNetwork {
      */
     private List<Integer> findAdjacentSearch(int index, String searching, String attribute){
         List<Integer> indexes = new LinkedList<>();
-        int current=0;
+        ArrayList<Person> personList = sortPersonList(attribute, new ArrayList<>(integerHashMap.values()));
+        int current;
         indexes.add(index);
-        String[] aux = searching.split(";");
         switch (attribute){
             case "identifier":
                 // Iterate upwards until we hit the end or a different value
@@ -1176,9 +1227,9 @@ public class SocialNetwork {
      * @param attribute the attribute the value(s) belong to.
      * @return a linked list with all indexes that match the search.
      */
-    private List<Integer> searchPersonList(String searching, String attribute){
+    private List<Integer> searchPersonList(String searching, String attribute, ArrayList<Person> personList){
         System.out.println("Searching...");
-        sortPersonList(attribute);
+        sortPersonList(attribute, personList);
         Person p = new Person();
         List<Integer> results = new LinkedList<>();
         int auxilary;
@@ -1237,7 +1288,7 @@ public class SocialNetwork {
                 String[] aux = searching.split(";");
                 for (Person k : personList){
                     if (k.equalsStudydata(aux)){
-                        auxilary = getIndex(k);
+                        auxilary = getIndex(k, personList);
                         if (auxilary != -1){
                             results.add(auxilary);
                         }
@@ -1249,7 +1300,7 @@ public class SocialNetwork {
                 String[] aux1 = searching.split(";");
                 for (Person k : personList){
                     if (k.equalsWorkdata(aux1)){
-                        auxilary = getIndex(k);
+                        auxilary = getIndex(k, personList);
                         if (auxilary != -1){
                             results.add(auxilary);
                         }
@@ -1261,7 +1312,7 @@ public class SocialNetwork {
                 String[] aux2 = searching.split(";");
                 for (Person k : personList){
                     if (k.equalsMovies(aux2)){
-                        auxilary = getIndex(k);
+                        auxilary = getIndex(k, personList);
                         if (auxilary != -1){
                             results.add(auxilary);
                         }
@@ -1285,8 +1336,8 @@ public class SocialNetwork {
      * @param searching What to be searched for.
      * @param attribute Where to search for it.
      */
-    private void printSearchedPersonList(String searching, String attribute){
-        List<Integer> results = searchPersonList(searching, attribute);
+    private void printSearchedPersonList(String searching, String attribute, ArrayList<Person> personList){
+        List<Integer> results = searchPersonList(searching, attribute, personList);
         if (results.size()>0){
             System.out.println("Found:");
             for (Integer i : results){
@@ -1303,77 +1354,113 @@ public class SocialNetwork {
      * @param p person
      * @return index
      */
-    private int getIndex (Person p){
-
-        for (int i=0;i< personList.size();i++){
-
-            if (p.equals(personList.get(i))){
-
+    private int getIndex (Person p, ArrayList<Person> personList){
+        for (int i = 0; i < personList.size(); i++){
+            if (p.equals(personList.get(i))) {
                 return i;
             }
-
-
         }
-
         return -1;
-    }
-    /**
-     * Method for using in other methods. Compares a person by its favourite movies. All movies have
-     * to be the same / it has to be the same collection.
-     * @param ob2 Movies of the comparing Person.
-     * @param ob1 Movies of the other comparing Person.
-     * @return Boolean true or false.
-     */
-    public boolean equalsMovieCollection(String[] ob1, String[] ob2){
-        boolean result = false;
-        int counter=0;
-        for (int i=0; i<ob2.length; i++){
-            for (int e=0; e<ob1.length; e++) {
-                if ( ob2[i].equalsIgnoreCase(ob1[e]) ){
-                    counter++;
-                }
-            }
-        }
-        if (counter == ob2.length && ob2.length==ob1.length){
-            result=true;
-        }
-        return result;
-    }
-    /**
-     * Method checks if a list of movie collections contains a certain collection
-     * @param c collections
-     * @param m certain collection
-     * @return if yes or no
-     */
-    private boolean containsMovieCollection(List<String[]> c, String[] m){
-        boolean result=false;
-        for (String[] k : c){
-
-            if (equalsMovieCollection(k,m)){
-
-                result=true;
-                return result; //Saves time
-            }
-
-        }
-        return result;
-
-    }
-    /**
-     * Method that gets all different movie collections from the network
-     * @return a list of all different movie collections
-     */
-    private List<String[]> getMovieCollections(){
-        List<String[]> collections = new LinkedList<>();
-        for (Person p : personList){
-            //if not already in list
-            if (!containsMovieCollection(collections,p.getMoviesdata()))
-                collections.add(p.getMoviesdata());
-        }
-        return collections;
     }
 
     // 3rd milestone
-
+    /**
+     * Obtains the shortest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return LinkedList of Persons with the shortest chain of relations.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private LinkedList<Person> shortestChain(String person1, String person2) throws RelationDoesNotExistException {
+        int[] previous = bfs(person1, person2);
+        int actual = personHashMap.get(new Person(person2));
+        int indexp1 = personHashMap.get(new Person(person1));
+        LinkedList<Person> res = new LinkedList<Person>();
+        res.addFirst(integerHashMap.get(actual));
+        while (actual != indexp1) {
+            actual = previous[actual];
+            res.addFirst(integerHashMap.get(actual));
+        }
+        return res;
+    }
+    /**
+     * Makes a Breadth-First Search in the graph to find the shortest chain of relations between person1 and person2 users in
+     * the SocialNetwork.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return Array that reference to the previous person in the relation chain.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private int[] bfs(String person1, String person2) throws RelationDoesNotExistException {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean[] visited = new boolean[numUsers];
+        int[] previous = new int[numUsers];
+        int indexp1 = personHashMap.get(new Person(person1));
+        int indexp2 = personHashMap.get(new Person(person2));
+        queue.offer(indexp1);
+        while (!queue.isEmpty()) {
+            indexp1 = queue.poll();
+            visited[indexp1] = true;
+            for (int i = 0; i < adjacencyList.get(indexp1).size(); i++) {
+                int actual = adjacencyList.get(indexp1).get(i);
+                if (actual == indexp2) {
+                    visited[actual] = true;
+                    previous[actual] = indexp1;
+                    return previous;
+                }
+                if (!visited[actual]) {
+                    visited[actual] = true;
+                    previous[actual] = indexp1;
+                    queue.offer(actual);
+                }
+            }
+        }
+        throw new RelationDoesNotExistException();
+    }
+    /**
+     * Gives a String representation of the shortest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return String representation of the shortest chain of relations.
+     */
+    private String shortestChainString(String person1, String person2) {
+        StringBuilder s = new StringBuilder();
+        s.append("This is the shortest chain of relations between ").append(person1).append(" and ").append(person2).append(":\n");
+        try {
+            LinkedList<Person> res = shortestChain(person1, person2);
+            while (!res.isEmpty()) {
+                s.append(" - ").append(res.getFirst().getBasicInfo()).append("\n");
+                res.removeFirst();
+            }
+        }
+        catch (RelationDoesNotExistException e) {
+            s.append("Error: Relation does not exist");
+        }
+        return s.toString();
+    }
+    /**
+     * Prints all the shortest chain of relations and the user(s) basic info to console.
+     */
+    private void printShortestChainToConsole(String person1, String person2) {
+        System.out.println(shortestChainString(person1, person2));
+    }
+    /**
+     * Prints all the shortest chain of relations and the user(s) basic info in the specified file.
+     * @param filename File where we want to save the information.
+     */
+    private void printShortestChainToFile(String person1, String person2, String filename) {
+        File f;
+        FileWriter fw;
+        StringBuilder s =  new StringBuilder();
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s.append(shortestChainString(person1, person2));
+            fw.write(s.toString());
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
+    }
 
 }

@@ -1,13 +1,14 @@
 package packSocialNetwork;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Person has a lot of data/information and can have relations with other packSocialNetwork.Person's on the Social Network.
  * This project is being developed on Data Structures and Algorithms subject on UPV/EHU at 2020/2021 academic year.
  *
  * @author Iyán Álvarez and Davy Wellinger
- * @version secondMilestone
+ * @version thirdMilestone
  */
 public class Person implements Comparable<Person> {
 
@@ -30,8 +31,15 @@ public class Person implements Comparable<Person> {
      */
     public Person() {}
     /**
+     * Constructor for verification purposes.
+     * @param identifier User ID's for the Social Network.
+     */
+    public Person(String identifier) {
+        this.identifier = identifier;
+    }
+    /**
      * Creates a packSocialNetwork.Person with the specified data.
-     * @param identifier User ID's for the Social Network
+     * @param identifier User ID's for the Social Network.
      * @param name packSocialNetwork.Person's name.
      * @param surname packSocialNetwork.Person's surname.
      * @param birthdate packSocialNetwork.Person's birthdate in dd-mm-year format.
@@ -98,7 +106,6 @@ public class Person implements Comparable<Person> {
      * @return Year of birthdate of the person.
      */
     public int getBirthdateYear() {
-        String s = "";
         String[] sarr = birthdate.split("-");
         return Integer.parseInt(sarr[2]);
     }
@@ -121,14 +128,14 @@ public class Person implements Comparable<Person> {
      * @return Favourite movies of the person.
      */
     public String getMovies() {
-        String moviesS = "";
+        StringBuilder moviesS = new StringBuilder();
         for(int i = 0; i < movies.length; i++) {
-            moviesS += movies[i];
+            moviesS.append(movies[i]);
             if (i < movies.length-1) {
-                moviesS += ";";
+                moviesS.append(";");
             }
         }
-        return moviesS;
+        return moviesS.toString();
     }
     /**
      * Getter of the user's Studydata array.
@@ -170,11 +177,11 @@ public class Person implements Comparable<Person> {
      * @return Values of Name, Surname, Birthplace and StudyData separated by blanks.
      */
     public String getMoreInfo() {
-        String studydataS = "";
+        StringBuilder studydataS = new StringBuilder();
         for(int i = 0; i < studydata.length; i++) {
-            studydataS += studydata[i];
+            studydataS.append(studydata[i]);
             if (i < studydata.length-1) {
-                studydataS += ";";
+                studydataS.append(";");
             }
         }
         return name + " " + surname + " " + birthplace + " " + studydataS;
@@ -253,41 +260,35 @@ public class Person implements Comparable<Person> {
      * otherwise false.
      */
     @Override public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Person)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
         Person person = (Person) o;
-        return  this.identifier.equals(person.getIdentifier()) &&
-                this.name.equals(person.getName()) &&
-                this.surname.equals(person.getSurname());
+        return identifier.equals(person.identifier);
     }
     /**
      * Returns the basic information of a packSocialNetwork.Person in the format: idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode
      * @return The basic information of a packSocialNetwork.Person in the specified format.
      */
     @Override public String toString() {
-        String studydataS = "";
+        StringBuilder studydataS = new StringBuilder();
         for(int i = 0; i < studydata.length; i++) {
-            studydataS += studydata[i];
+            studydataS.append(studydata[i]);
             if (i < studydata.length-1) {
-                studydataS += ";";
+                studydataS.append(";");
             }
         }
-        String workdataS = "";
+        StringBuilder workdataS = new StringBuilder();
         for(int i = 0; i < workdata.length; i++) {
-            workdataS += workdata[i];
+            workdataS.append(workdata[i]);
             if (i < workdata.length-1) {
-                workdataS += ";";
+                workdataS.append(";");
             }
         }
-        String moviesS = "";
+        StringBuilder moviesS = new StringBuilder();
         for(int i = 0; i < movies.length; i++) {
-            moviesS += movies[i];
+            moviesS.append(movies[i]);
             if (i < movies.length-1) {
-                moviesS += ";";
+                moviesS.append(";");
             }
         }
         return  identifier + "," + name + "," + surname + "," + birthdate + "," + gender + "," +
@@ -311,6 +312,13 @@ public class Person implements Comparable<Person> {
             res = 1;
         }
         return res;
+    }
+    /**
+     * Obtains the hashcode of the Person.
+     * @return hashcode of the Person.
+     */
+    @Override public int hashCode() {
+        return Objects.hash(identifier);
     }
     public static Comparator<Person> comparatorDatesList() {
         return new Comparator<Person>() {
@@ -354,9 +362,9 @@ public class Person implements Comparable<Person> {
 
         int counter=0;
 
-        for (int i=0; i<ob2.length; i++){
-            for (int e=0; e<this.getStudydata().length; e++) {
-                if ( ob2[i].equalsIgnoreCase(this.getStudydata()[e])){
+        for (String s : ob2) {
+            for (int e = 0; e < this.getStudydata().length; e++) {
+                if (s.equalsIgnoreCase(this.getStudydata()[e])) {
                     counter++;
                 }
             }
@@ -378,9 +386,9 @@ public class Person implements Comparable<Person> {
 
         int counter=0;
 
-        for (int i=0; i<ob2.length; i++){
-            for (int e=0; e<this.getWorkdata().length; e++) {
-                if (ob2[i].equalsIgnoreCase(this.getWorkdata()[e])){
+        for (String s : ob2) {
+            for (int e = 0; e < this.getWorkdata().length; e++) {
+                if (s.equalsIgnoreCase(this.getWorkdata()[e])) {
                     counter++;
                 }
             }
@@ -402,9 +410,9 @@ public class Person implements Comparable<Person> {
 
         int counter=0;
 
-        for (int i=0; i<ob2.length; i++){
-            for (int e=0; e<this.getMoviesdata().length; e++) {
-                if ( ob2[i].equalsIgnoreCase(this.getMoviesdata()[e]) ){
+        for (String s : ob2) {
+            for (int e = 0; e < this.getMoviesdata().length; e++) {
+                if (s.equalsIgnoreCase(this.getMoviesdata()[e])) {
                     counter++;
                 }
             }
@@ -417,13 +425,14 @@ public class Person implements Comparable<Person> {
         return result;
     }
 
+
+
     //Comparators
     /**
      * Comparator method: Identifier.
      */
     public static Comparator<Person> CprIdentifier = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getIdentifier();
             String id2 = o2.getIdentifier();
             return id1.compareTo(id2);
@@ -433,8 +442,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Name.
      */
     public static Comparator<Person> CprName = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getName().toUpperCase();
             String id2 = o2.getName().toUpperCase();
 
@@ -446,8 +454,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Surname.
      */
     public static Comparator<Person> CprSurname = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getSurname().toUpperCase();
             String id2 = o2.getSurname().toUpperCase();
 
@@ -459,8 +466,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Birthdate.
      */
     public static Comparator<Person> CprBirthdate = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getBirthdate().toUpperCase();
             String id2 = o2.getBirthdate().toUpperCase();
 
@@ -472,8 +478,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Gender.
      */
     public static Comparator<Person> CprGender = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getGender().toUpperCase();
             String id2 = o2.getGender().toUpperCase();
 
@@ -485,8 +490,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Birthplace.
      */
     public static Comparator<Person> CprBirthplace = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getBirthplace().toUpperCase();
             String id2 = o2.getBirthplace().toUpperCase();
 
@@ -498,8 +502,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Home.
      */
     public static Comparator<Person> CprHome = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getHome().toUpperCase();
             String id2 = o2.getHome().toUpperCase();
 
@@ -511,8 +514,7 @@ public class Person implements Comparable<Person> {
      * Comparator method: Groupcode.
      */
     public static Comparator<Person> CprGroupcode = new Comparator<Person>() {
-        @Override
-        public int compare(Person o1, Person o2) {
+        @Override public int compare(Person o1, Person o2) {
             String id1 = o1.getGroupcode().toUpperCase();
             String id2 = o2.getGroupcode().toUpperCase();
 
