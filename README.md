@@ -9,13 +9,9 @@ The *data structures already used* at the project are:
 - Arrays (sorted and unsorted)
 - ArrayLists (sorted and unsorted)
 - LinkedList
+- Stack
 - HashMap
-
-
-In *further implementations*, we could implement:
 - Graphs
-- Binary Search Tress
-
 
 <p align="center">
   <img width="400" height="400" src="https://github.com/iyan22/Social-Network/blob/master/graphs/friends55.png">
