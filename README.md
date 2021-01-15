@@ -10,8 +10,10 @@ The *data structures already used* at the project are:
 - ArrayLists (sorted and unsorted)
 - LinkedList
 - Stack
+- Queue
+- Set
 - HashMap
-- Graphs
+- Graph (adjacency list)
 
 <p align="center">
   <img width="400" height="400" src="https://github.com/iyan22/Social-Network/blob/master/graphs/friends55.png">
