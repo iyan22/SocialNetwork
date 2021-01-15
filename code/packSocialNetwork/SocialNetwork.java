@@ -272,7 +272,9 @@ public class SocialNetwork {
             try {
                 to = sc.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Error: Introduce a number from 1 to 6 (both included)");
+                System.out.println("Error: Introduce a number from 1 to 6 (both included)\n");
+                to = 0;
+                sc.nextLine();
             }
         } while (to < 1 || 9 < to);
         switch (to) {
@@ -422,6 +424,27 @@ public class SocialNetwork {
                 }
                 break;
             case 8:
+                System.out.println("You have selected: ");
+                System.out.println( "8. Longest chain of relations \n" +
+                        "    C. Console \n" +
+                        "    F. File");
+                String tos8;
+                do {
+                    System.out.println("Console (C) or File (F)");
+                    System.out.print("\nEnter C or F: ");
+                    tos8 = sc.next();
+                } while (!(tos8.equals("C") || tos8.equals("F")));
+                System.out.print("Write initial person: ");
+                String sn81 = sc.next();
+                System.out.print("Write finish person: ");
+                String sn82 = sc.next();
+                if (tos8.equals("C"))
+                    printLongestChainToConsole(sn81, sn82);
+                else {
+                    System.out.println("The file will be on 'files/' directory.");
+                    System.out.print("Enter the name of the file: ");
+                    printLongestChainToFile(sn81, sn82, sc.next());
+                }
                 break;
             case 9:
                 break;
@@ -1371,7 +1394,7 @@ public class SocialNetwork {
      * @return LinkedList of Persons with the shortest chain of relations.
      * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
      */
-    private LinkedList<Person> shortestChain(String person1, String person2) throws RelationDoesNotExistException {
+    private LinkedList<Person> shortestChain(String person1, String person2) throws RelationDoesNotExistException, PersonNotFoundException {
         int[] previous = bfs(person1, person2);
         int actual = personHashMap.get(new Person(person2));
         int indexp1 = personHashMap.get(new Person(person1));
@@ -1391,12 +1414,17 @@ public class SocialNetwork {
      * @return Array that reference to the previous person in the relation chain.
      * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
      */
-    private int[] bfs(String person1, String person2) throws RelationDoesNotExistException {
+    private int[] bfs(String person1, String person2) throws RelationDoesNotExistException, PersonNotFoundException {
         Queue<Integer> queue = new LinkedList<Integer>();
         boolean[] visited = new boolean[numUsers];
         int[] previous = new int[numUsers];
-        int indexp1 = personHashMap.get(new Person(person1));
-        int indexp2 = personHashMap.get(new Person(person2));
+        int indexp1, indexp2;
+        try {
+            indexp1 = personHashMap.get(new Person(person1));
+            indexp2 = personHashMap.get(new Person(person2));
+        } catch (NullPointerException e) {
+            throw new PersonNotFoundException();
+        }
         queue.offer(indexp1);
         while (!queue.isEmpty()) {
             indexp1 = queue.poll();
@@ -1436,16 +1464,19 @@ public class SocialNetwork {
         catch (RelationDoesNotExistException e) {
             s.append("Error: Relation does not exist");
         }
+        catch (PersonNotFoundException e) {
+            s.append("Error: Person does not exist");
+        }
         return s.toString();
     }
     /**
-     * Prints all the shortest chain of relations and the user(s) basic info to console.
+     * Prints the shortest chain of relations and the user(s) basic info to console.
      */
     private void printShortestChainToConsole(String person1, String person2) {
         System.out.println(shortestChainString(person1, person2));
     }
     /**
-     * Prints all the shortest chain of relations and the user(s) basic info in the specified file.
+     * Prints the shortest chain of relations and the user(s) basic info in the specified file.
      * @param filename File where we want to save the information.
      */
     private void printShortestChainToFile(String person1, String person2, String filename) {
@@ -1456,6 +1487,98 @@ public class SocialNetwork {
             f = new File("files/" + filename);
             fw = new FileWriter(f);
             s.append(shortestChainString(person1, person2));
+            fw.write(s.toString());
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: File was not found");
+        }
+    }
+    /**
+     * Obtains the longest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return ArrayList of Persons with the longest chain of relations.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private Stack<Person> longestChain(Person person1, Person person2) {
+        Stack<Person> path = new Stack<Person>();
+        Set<Person> onPath = new LinkedHashSet<Person>();
+        Stack<Person> maxStack;
+        Stack<Person> finalStack = new Stack<Person>();
+        return longestChainBacktracking(person1, person2, path, onPath, new Stack<Person>());
+    }
+    /**
+     * Obtains the longest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Actual Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @param path Stack that contains the actual chain of relations.
+     * @param onPath Set to check if the Person's have been added to the actual chain.
+     * @param maxStack Stack with the longest chain of relations found until now.
+     * @return Stack of Persons with the longest chain of relations.
+     * @throws RelationDoesNotExistException if the relation chain does not exist in the Social Network.
+     */
+    private Stack<Person> longestChainBacktracking(Person person1, Person person2, Stack<Person> path, Set<Person> onPath, Stack<Person> maxStack){
+        path.push(person1);
+        onPath.add(person1);
+        if (person1.equals(person2)) {
+            if (maxStack.size() < path.size()){
+                maxStack = (Stack<Person>) path.clone();
+            }
+            onPath.remove(person1);
+            path.pop();
+        }
+        else {
+            for (int k : adjacencyList.get(personHashMap.get(person1))) {
+                if (!onPath.contains(integerHashMap.get(k))) {
+                    maxStack = longestChainBacktracking(integerHashMap.get(k), person2, path, onPath, maxStack);
+                }
+            }
+            path.pop();
+            onPath.remove(person1);
+        }
+        return maxStack;
+    }
+    /**
+     * Gives a String representation of the shortest chain of relations between person1 and person2 users in the Social Network.
+     * @param person1 Initial Person's identifier.
+     * @param person2 Final Person's identifier.
+     * @return String representation of the shortest chain of relations.
+     */
+    private String longestChainString(String person1, String person2) {
+        StringBuilder s = new StringBuilder();
+        s.append("This is the longest chain of relations between ").append(person1).append(" and ").append(person2).append(":\n");
+        try {
+            Stack<Person> res = longestChain(integerHashMap.get(personHashMap.get(new Person(person1))), integerHashMap.get(personHashMap.get(new Person(person2))));
+            if (res.isEmpty()) {
+                s.append("Error: Relation does not exist");
+            } else {
+                for (Person p : res) {
+                    s.append(" - ").append(p.getBasicInfo()).append("\n");
+                }
+            }
+        } catch (NullPointerException e) {              // Is thrown if we map a person that does not exist
+            s.append("Error: Person does not exist");
+        }
+        return s.toString();
+    }
+    /**
+     * Prints the longest chain of relations and the user(s) basic info to console.
+     */
+    private void printLongestChainToConsole(String person1, String person2) {
+        System.out.println(longestChainString(person1, person2));
+    }
+    /**
+     * Prints the longest chain of relations and the user(s) basic info in the specified file.
+     * @param filename File where we want to save the information.
+     */
+    private void printLongestChainToFile(String person1, String person2, String filename) {
+        File f;
+        FileWriter fw;
+        StringBuilder s =  new StringBuilder();
+        try {
+            f = new File("files/" + filename);
+            fw = new FileWriter(f);
+            s.append(longestChainString(person1, person2));
             fw.write(s.toString());
             fw.close();
         } catch (IOException e) {
