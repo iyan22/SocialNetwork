@@ -1,12 +1,16 @@
 package packSocialNetwork;
 
-import packSocialNetworkExceptions.*;
+import packSocialNetworkExceptions.PersonAlreadyAtSocialNetwork;
+import packSocialNetworkExceptions.PersonNotFoundException;
+import packSocialNetworkExceptions.RelationAlreadyAtSocialNetwork;
+import packSocialNetworkGraph.FriendshipGraph;
 import packSocialNetworkGraph.Vertex;
 
-import java.io.*;
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
-import packSocialNetworkGraph.*;
 
 /**
  * SocialNetwork contains people information and the relations between them if exist.
@@ -71,7 +75,7 @@ public class SocialNetwork {
      */
     private void printAddPersonPeople() {
         System.out.println(
-                        "1. Add person or people: \n" +
+                "1. Add person or people: \n" +
                         "    M. Manually \n" +
                         "    F. File ");
     }
@@ -80,7 +84,7 @@ public class SocialNetwork {
      */
     private void printAddRelations() {
         System.out.println(
-                        "2. Add relation(s): \n" +
+                "2. Add relation(s): \n" +
                         "    M. Manually \n" +
                         "    F. File ");
     }
@@ -89,7 +93,7 @@ public class SocialNetwork {
      */
     private void printPrintOut() {
         System.out.println(
-                        "3. Print out people: \n" +
+                "3. Print out people: \n" +
                         "    C. Console \n" +
                         "    F. File ");
     }
@@ -98,7 +102,7 @@ public class SocialNetwork {
      */
     private void printFind() {
         System.out.println(
-                        "4. Find: \n" +
+                "4. Find: \n" +
                         "    1. Friends of the person given the surname \n" +
                         "    2. People born in specified city \n" +
                         "    3. People born between two dates \n" +
@@ -106,7 +110,7 @@ public class SocialNetwork {
                         "    5. People that share favourite movies \n" +
                         "    6. Collection of favourite movies and persons \n" +
                         "    7. Shortest chain of friends between two people \n" +
-                        "    8. Cliques (not available yet)");
+                        "    8. Longest path between two people");
     }
     /**
      * Prints the choices of Search.
@@ -127,8 +131,8 @@ public class SocialNetwork {
             switch (option) {
                 case 0:
                     System.out.println("Secret! Adding 55 People and Relations to the Network...");
-                    addPeopleFromFile("people55.txt");
-                    addRelationsFromFile("friends55.txt");
+                    addPeopleFromFile("peopleG612054.txt");
+                    addRelationsFromFile("friendsG612054.txt");
 
 
                     break;
@@ -276,8 +280,8 @@ public class SocialNetwork {
             case 1:
                 System.out.println("You have selected: ");
                 System.out.println( "1. Friends of the person given the surname \n" +
-                                    "    C. Console \n" +
-                                    "    F. File ");
+                        "    C. Console \n" +
+                        "    F. File ");
                 String tos1;
                 do {
                     System.out.println("Console (C) or File (F)");
@@ -410,6 +414,19 @@ public class SocialNetwork {
 
                 break;
             case 8:
+                System.out.println("You have selected: ");
+                System.out.println( "8. Longest path between two people \n");
+                String i1, i2;
+
+                System.out.println("Please, write the Id of the first person: ");
+                i1 = sc.next();
+                System.out.println("");
+                System.out.println("Please, write the Id of the second person: ");
+                i2 = sc.next();
+                System.out.println("");
+                printLongestPath(i1,i2);
+
+
                 break;
             default:
                 break;
@@ -1422,6 +1439,38 @@ public class SocialNetwork {
                 }
                 s += ".";
                 System.out.println(s);
+            }
+        }
+        else{
+            System.out.println("No users with given Ids exists in the Network!");
+        }
+
+    }
+
+    private void printLongestPath (String Id1, String Id2){
+        if (existsInSocialNetwork(Id1) && existsInSocialNetwork(Id2)) {
+            Person p1 = binarySearchPersonID(Id1);
+            Person p2 = binarySearchPersonID(Id2);
+
+            //Add to graph. Does nothing if they are already in the graph, adds them if not and obviously that means that there is no friendship yet.
+            friendshipGraph.addPerson(p1);
+            friendshipGraph.addPerson(p2);
+
+            Stack<Vertex> path = friendshipGraph.longestPath(p1, p2);
+            if (!path.isEmpty()) {
+                System.out.println("Longest path from " + Id1 + " to " + Id2 + ":");
+                String s =  path.pop().getP().getIdentifier()+" ";
+
+                while(!path.isEmpty()){
+                    s += " -> ";
+                    s += path.pop().getP().getIdentifier();
+
+                }
+                s += ".";
+                System.out.println(s);
+            }
+            else{
+                System.out.println("It seems there is no path between them...");
             }
         }
         else{

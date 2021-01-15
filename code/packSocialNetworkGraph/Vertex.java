@@ -33,7 +33,7 @@ public class Vertex {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vertex vertex = (Vertex) o;
-        return Objects.equals(p, vertex.p);
+        return p.equals(vertex.getP());
     }
 
     /**

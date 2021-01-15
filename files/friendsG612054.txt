@@ -1,10 +1,8 @@
 friend1,friend2
 Ander01,MireN5
 Ander01,Beñat22
-Ander01,Naro00
 Ander01,Maia1en
 MireN5,Beñat22
-MireN5,Naro00
 MireN5,Maia1en
 Beñat22,Naro00
 Beñat22,Maia1en

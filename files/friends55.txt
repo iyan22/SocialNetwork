@@ -58,7 +58,6 @@ Javi,Iker
 Javi,Alejo
 Javi,Igor
 Iker,Alejo
-Iker,Igor
 Alejo,Igor
 Mike673,Jandrol094
 Mike673,Esti374

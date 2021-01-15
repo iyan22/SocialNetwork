@@ -12,6 +12,57 @@ public class FriendshipGraph {
 
     private Map<Vertex, List<Vertex>> adjVertices;
 
+    //For longest Path
+
+    public Stack<Vertex> longestPath( Person p1, Person p2){
+        Stack<Vertex> path = new Stack<>();
+        Set<Vertex> onPath = new LinkedHashSet<>();
+        Stack<Vertex> maxStack;
+        Stack<Vertex> finalStack = new Stack();
+       maxStack= enumerate(p1, p2, path, onPath, new Stack<Vertex>());
+
+        while(!maxStack.isEmpty()){
+
+            finalStack.push(maxStack.pop());
+
+        }
+
+        return finalStack;
+    }
+
+    private Stack<Vertex> enumerate(Person p1, Person p2, Stack<Vertex> path, Set<Vertex> onPath, Stack<Vertex> maxStack){
+        Vertex v = new Vertex(p1);
+
+        path.push(v);
+        onPath.add(v);
+
+        if (v.getP().equals(p2)){
+            if(maxStack.size()<path.size()){
+                maxStack= (Stack<Vertex>) path.clone();
+            }
+            onPath.remove(v);
+            path.pop();
+
+
+        }
+        else {
+            for (Vertex k : getAdjList(v.getP())) {
+                if(!onPath.contains(k)) {
+                    maxStack=enumerate(k.getP(), p2, path, onPath, maxStack);
+                }
+            }
+            path.pop();
+            onPath.remove(v);
+        }
+
+        return maxStack;
+
+    }
+
+
+
+
+
     /**
      * Constructor. Makes a HashMap of Vertexes(Person) and asociates a List of Vertexes(Person).
      */
@@ -194,7 +245,7 @@ public class FriendshipGraph {
 
         if(!vertex.equals(new Vertex(destination))){
 
-             stop = true;
+            stop = true;
 
             System.out.println("Error. "+source.getIdentifier()+" and "+destination.getIdentifier()+" are not friends!");
 
@@ -208,7 +259,7 @@ public class FriendshipGraph {
             }
         }
         else{
-            
+
         }
 
         return shortestPath; //Or return reverse(shortestPath);
